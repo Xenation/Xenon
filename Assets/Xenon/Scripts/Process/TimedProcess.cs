@@ -1,5 +1,3 @@
-using System;
-
 namespace Xenon.Processes {
 	public class TimedProcess : Process {
 

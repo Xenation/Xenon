@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using Xenon.Processes;
 
 namespace Xenon.Test {
-	public class Tester : MonoBehaviour {
+	public class Tester : Singleton<Tester>, IEventSender {
 
 		public Graphic fadeInTest;
 		public Graphic fadeOutTest;
@@ -14,11 +14,15 @@ namespace Xenon.Test {
 		private Process fadeOutProc;
 		private Process timerProc;
 
+		private TestListener testListener;
+
 		public void Awake() {
 			rythmer = GetComponent<ProcessRythmer>();
+			testListener = new TestListener();
 		}
 
 		public void Start() {
+			//Process
 			fadeInProc = new FadeInProcess(2f, fadeInTest);
 			rythmer.ProcessManager.LaunchProcess(fadeInProc);
 
@@ -27,10 +31,17 @@ namespace Xenon.Test {
 
 			fadeOutProc = new FadeOutProcess(2f, fadeOutTest);
 			timerProc.Attach(fadeOutProc);
+
+			//Event
+			this.Send(new TestEvent());
 		}
 		
 		public void Update() {
 
+		}
+
+		public void OnDestroy() {
+			EventManager.I.UnregisterListener(testListener);
 		}
 	}
 }
