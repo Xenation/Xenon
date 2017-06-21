@@ -4,7 +4,7 @@ namespace Xenon.Test {
 	public class TestListener : IEventListener {
 
 		public TestListener() {
-			EventManager.I.RegisterListener(this);
+			this.RegisterListener();
 		}
 
 		public void OnTest(IEventSender sender, Event ev) {
