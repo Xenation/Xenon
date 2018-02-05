@@ -7,7 +7,7 @@ namespace Xenon.Test {
 			EventManager.I.RegisterListener(this);
 		}
 
-		public void OnTest(IEventSender sender, Event ev) {
+		public void OnTest(IEventSender sender, XEvent ev) {
 			Debug.Log("EVENT CAUGHT!");
 		}
 

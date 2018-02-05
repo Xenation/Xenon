@@ -18,7 +18,7 @@ namespace Xenon {
 				listeners = new List<IEventListener>();
 			}
 
-			public void Invoke(IEventSender sender, Event ev) {
+			public void Invoke(IEventSender sender, XEvent ev) {
 				foreach (IEventListener listener in listeners) {
 					method.Invoke(listener, new object[] { sender, ev });
 				}
@@ -76,7 +76,7 @@ namespace Xenon {
 			for (int i = 0; i < methods.Length; i++) {
 				if (methods[i].Name.StartsWith("On")) {
 					ParameterInfo[] parameters = methods[i].GetParameters();
-					if (parameters.Length == 2 && IsClassOrSub(parameters[0].ParameterType, typeof(IEventSender)) && IsClassOrSub(parameters[1].ParameterType, typeof(Event))) {
+					if (parameters.Length == 2 && IsClassOrSub(parameters[0].ParameterType, typeof(IEventSender)) && IsClassOrSub(parameters[1].ParameterType, typeof(XEvent))) {
 						string methSuffix = methods[i].Name.Substring(2);
 						HandlingMethod meth = new HandlingMethod(methods[i], listenerType);
 						List<HandlingMethod> evHanlders;
@@ -95,7 +95,7 @@ namespace Xenon {
 			return t1 == t2 || t1.IsSubclassOf(t2);
 		}
 
-		public void SendEvent(IEventSender sender, Event ev) {
+		public void SendEvent(IEventSender sender, XEvent ev) {
 			string suffix = HandlingMethodSuffix(ev.GetType());
 			List<HandlingMethod> evHandlers;
 			if (handlers.TryGetValue(suffix, out evHandlers)) {
