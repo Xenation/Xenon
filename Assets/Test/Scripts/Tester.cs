@@ -37,7 +37,9 @@ namespace Xenon.Test {
 		}
 		
 		public void Update() {
+			TimingDebugger.StartTiming("Tester - Update");
 
+			TimingDebugger.EndTiming();
 		}
 
 		public void OnDestroy() {

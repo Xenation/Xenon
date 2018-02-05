@@ -8,6 +8,7 @@ namespace Xenon.Editor {
 
 		protected override float minWidth { get { return 300f; } }
 		protected override float minHeight { get { return 275f; } }
+		protected override string titleStr { get { return "Essentials"; } }
 
 		private Color colorX;
 		private Color colorY;

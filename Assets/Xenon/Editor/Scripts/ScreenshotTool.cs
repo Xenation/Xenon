@@ -6,6 +6,7 @@ namespace Xenon.Editor {
 
 		protected override float minWidth { get { return 300f; } }
 		protected override float minHeight { get { return 75f; } }
+		protected override string titleStr { get { return "Screenshot Tool"; } }
 
 		private const int SUPER_SIZE_MIN = 1;
 		private const int SUPER_SIZE_MAX = 8;

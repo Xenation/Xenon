@@ -23,6 +23,10 @@ namespace Xenon.Editor {
 				ScreenshotTool.ShowWindow();
 			}
 
+			if (GUILayout.Button("Timings Debugger")) {
+				TimingDebuggerWindow.ShowWindow();
+			}
+
 		}
 
 	}
