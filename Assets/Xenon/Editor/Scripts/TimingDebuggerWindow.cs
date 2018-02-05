@@ -9,22 +9,31 @@ namespace Xenon.Editor {
 		protected override string titleStr { get { return "Timings Debugger"; } }
 
 		private void OnEnable() {
-			EditorApplication.playModeStateChanged += PlayModeChange;
+			EditorApplication.playmodeStateChanged = PlayModeChange;
 		}
 
-		private void PlayModeChange(PlayModeStateChange stateChange) {
-			if (stateChange == PlayModeStateChange.EnteredPlayMode) {
+		private void PlayModeChange() {
+			if (EditorApplication.isPlaying) {
 				TimingDebugger.ClearAll();
 			}
 		}
 
-		private void OnGUI() {
-
-			TimingDebugger.root.DrawGUI(position.width);
+		private void Update() {
+			if (TimingDebugger.hasRecordedThisFrame) {
+				Repaint();
+			}
 
 			if (Time.frameCount > TimingDebugger.prevFrameCount) {
 				TimingDebugger.EndFrame();
 				TimingDebugger.prevFrameCount = Time.frameCount;
+			}
+		}
+
+		private void OnGUI() {
+			TimingDebugger.root.DrawGUI(position.width);
+
+			if (GUILayout.Button("Reset")) {
+				TimingDebugger.ClearAll();
 			}
 		}
 

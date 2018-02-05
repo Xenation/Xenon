@@ -89,6 +89,12 @@ namespace Xenon {
 		public static Timing scope { get; private set; }
 		private static HashSet<Timing> currentFrameTimings;
 
+		public static bool hasRecordedThisFrame {
+			get {
+				return currentFrameTimings.Count != 0;
+			}
+		}
+
 		static TimingDebugger() {
 			Init();
 		}
