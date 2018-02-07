@@ -114,7 +114,7 @@ namespace Xenon {
 			scope = root;
 		}
 
-		public static void StartTiming(string id) {
+		public static void Start(string id) {
 			Timing timing = scope.GetChildTiming(id);
 			if (timing == null) {
 				timing = scope.AddChild(id);
@@ -124,7 +124,7 @@ namespace Xenon {
 			currentFrameTimings.Add(timing);
 		}
 
-		public static void EndTiming() {
+		public static void Stop() {
 			scope.Stop();
 			scope = scope.parent;
 		}
