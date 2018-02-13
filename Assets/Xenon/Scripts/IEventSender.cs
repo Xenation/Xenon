@@ -5,7 +5,7 @@ namespace Xenon {
 
 	public static class IEventSenderExt {
 
-		public static void Send(this IEventSender sender, Event ev) {
+		public static void Send(this IEventSender sender, XEvent ev) {
 			EventManager.I.SendEvent(sender, ev);
 		}
 
