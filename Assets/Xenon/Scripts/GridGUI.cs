@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -38,6 +39,9 @@ namespace Xenon {
 		private GridPos maxPos;
 		
 		public string this[int rowIndex, int colIndex] {
+			get {
+				return GetCellString(rowIndex, colIndex);
+			}
 			set {
 				SetCell(rowIndex, colIndex, value);
 			}
@@ -55,22 +59,38 @@ namespace Xenon {
 			for (int i = 0; i < titles.Length; i++) {
 				header.Add(new GridCell(new GUIContent(titles[i]), headerStyle));
 			}
+			maxPos = new GridPos(titles.Length - 1, 0);
 		}
 
 		public void SetCell(int rowIndex, int colIndex, string str) {
 			GridCell cell;
 			GridPos pos = new GridPos(colIndex, rowIndex);
-			if (!grid.TryGetValue(pos, out cell)) { // TODO unsafe, might still be out of bounds
+			if (grid.TryGetValue(pos, out cell)) {
+				cell.content.text = str;
+			} else {
 				cell = new GridCell(new GUIContent(str), EditorStyles.label);
 				grid.Add(pos, cell);
+				if (pos.x > maxPos.x) {
+					maxPos.x = pos.x;
+				}
+				if (pos.y > maxPos.y) {
+					maxPos.y = pos.y;
+				}
 			}
-			cell.content = new GUIContent(str);
-			if (pos.x > maxPos.x) {
-				maxPos.x = pos.x;
+		}
+
+		public string GetCellString(int rowIndex, int colIndex) {
+			GridCell cell;
+			GridPos pos = new GridPos(colIndex, rowIndex);
+			if (grid.TryGetValue(pos, out cell)) {
+				return cell.content.text;
 			}
-			if (pos.y > maxPos.y) {
-				maxPos.y = pos.y;
-			}
+			return "";
+		}
+
+		public void Clear() {
+			grid.Clear();
+			maxPos = new GridPos(header.Count - 1, 0);
 		}
 
 		public void DisplayGUI(float width) {

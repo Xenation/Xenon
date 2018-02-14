@@ -44,11 +44,12 @@ namespace Xenon.Editor {
 		}
 
 		private void OnGUI() {
-			TimingDebugger.root.FillGrid(grid, 0);
+			TimingDebugger.root.FillGrid(grid);
 			grid.DisplayGUI(position.width);
 
 			if (GUILayout.Button("Reset")) {
 				TimingDebugger.ClearAll();
+				grid.Clear();
 			}
 		}
 
