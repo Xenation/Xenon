@@ -8,12 +8,26 @@ namespace Xenon.Editor {
 		protected override float minHeight { get { return 300f; } }
 		protected override string titleStr { get { return "Timings Debugger"; } }
 
-		private void OnEnable() {
-			EditorApplication.playmodeStateChanged = PlayModeChange;
+		private GridGUI _grid;
+		private GridGUI grid {
+			get {
+				if (_grid == null) {
+					_grid = new GridGUI();
+					_grid.SetHeader("ID", "Avg", "Max");
+				}
+				return _grid;
+			}
+			set {
+				_grid = value;
+			}
 		}
 
-		private void PlayModeChange() {
-			if (EditorApplication.isPlaying) {
+		private void OnEnable() {
+			EditorApplication.playModeStateChanged += PlayModeChange;
+		}
+
+		private void PlayModeChange(PlayModeStateChange change) {
+			if (change == PlayModeStateChange.ExitingEditMode) {
 				TimingDebugger.ClearAll();
 			}
 		}
@@ -30,7 +44,8 @@ namespace Xenon.Editor {
 		}
 
 		private void OnGUI() {
-			TimingDebugger.root.DrawGUI(position.width);
+			TimingDebugger.root.FillGrid(grid, 0);
+			grid.DisplayGUI(position.width);
 
 			if (GUILayout.Button("Reset")) {
 				TimingDebugger.ClearAll();

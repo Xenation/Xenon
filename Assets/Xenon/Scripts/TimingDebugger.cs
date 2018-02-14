@@ -77,6 +77,16 @@ namespace Xenon {
 			EditorGUI.indentLevel--;
 		}
 
+		public void FillGrid(GridGUI grid, int row) {
+			grid[row, 0] = id;
+			grid[row, 1] = GetAverageMilliseconds() + "ms";
+			grid[row, 2] = GetMaxMilliseconds() + "ms";
+			row++;
+			foreach (Timing timing in childs.Values) {
+				timing.FillGrid(grid, row++);
+			}
+		}
+
 	}
 
 	public static class TimingDebugger {

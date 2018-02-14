@@ -267,6 +267,6 @@ namespace Xenon.Editor {
 				cam.fieldOfView = view.camera.fieldOfView;
 			}
 		}
-
+		
 	}
 }
