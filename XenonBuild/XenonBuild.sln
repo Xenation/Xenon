@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2017
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XenonBuild", "XenonBuild.csproj", "{F7054B21-2E7D-44CA-821C-2B5BE612E467}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XenonBuild.Editor", "XenonBuild.Editor.csproj", "{744A3E71-6C66-4E7D-A36F-727101A12B53}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F7054B21-2E7D-44CA-821C-2B5BE612E467}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7054B21-2E7D-44CA-821C-2B5BE612E467}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7054B21-2E7D-44CA-821C-2B5BE612E467}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7054B21-2E7D-44CA-821C-2B5BE612E467}.Release|Any CPU.Build.0 = Release|Any CPU
+		{744A3E71-6C66-4E7D-A36F-727101A12B53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{744A3E71-6C66-4E7D-A36F-727101A12B53}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{744A3E71-6C66-4E7D-A36F-727101A12B53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{744A3E71-6C66-4E7D-A36F-727101A12B53}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
