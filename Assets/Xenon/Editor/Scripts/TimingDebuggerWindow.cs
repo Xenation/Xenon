@@ -44,12 +44,44 @@ namespace Xenon.Editor {
 		}
 
 		private void OnGUI() {
-			TimingDebugger.root.FillGrid(grid);
+			FillGrid(TimingDebugger.root, grid);
 			grid.DisplayGUI(position.width);
 
 			if (GUILayout.Button("Reset")) {
 				TimingDebugger.ClearAll();
 				grid.Clear();
+			}
+		}
+
+		public void DrawGUI(Timing timing, float width) {
+			EditorGUILayout.BeginHorizontal();
+			EditorGUILayout.LabelField(timing.id, GUILayout.MaxWidth(width / 2f - 10f));
+			EditorGUILayout.LabelField("avg: " + timing.GetAverageMilliseconds() + "ms" + " - max: " + timing.GetMaxMilliseconds() + "ms", TimingDebugger.alignRight, GUILayout.MaxWidth(width / 2f));
+			EditorGUILayout.EndHorizontal();
+
+			EditorGUI.indentLevel++;
+			foreach (Timing tmg in timing.childs.Values) {
+				DrawGUI(tmg, width);
+			}
+			EditorGUI.indentLevel--;
+		}
+
+		public void FillGrid(Timing timing, GridGUI grid) {
+			int row = 0;
+			FillGrid(timing, grid, ref row, 0);
+		}
+
+		public void FillGrid(Timing timing, GridGUI grid, ref int row, int indent) {
+			grid[row, 0] = "";
+			for (int i = 0; i < indent; i++) {
+				grid[row, 0] += "  ";
+			}
+			grid[row, 0] += timing.id;
+			grid[row, 1] = timing.GetAverageMilliseconds() + "ms";
+			grid[row, 2] = timing.GetMaxMilliseconds() + "ms";
+			row++;
+			foreach (Timing tmg in timing.childs.Values) {
+				FillGrid(tmg, grid, ref row, indent + 1);
 			}
 		}
 
