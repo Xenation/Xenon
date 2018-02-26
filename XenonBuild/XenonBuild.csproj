@@ -359,7 +359,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <!-- XENON -->
     <Compile Include="..\Assets\Xenon\Scripts\EventManager.cs" />
-    <Compile Include="..\Assets\Xenon\Scripts\GridGUI.cs" />
     <Compile Include="..\Assets\Xenon\Scripts\IEventListener.cs" />
     <Compile Include="..\Assets\Xenon\Scripts\IEventSender.cs" />
     <Compile Include="..\Assets\Xenon\Scripts\Process.cs" />
