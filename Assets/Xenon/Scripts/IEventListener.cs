@@ -9,5 +9,9 @@ namespace Xenon {
 			EventManager.I.RegisterListener(listener);
 		}
 
+		public static void UnregisterListener(this IEventListener listener) {
+			EventManager.I.UnregisterListener(listener);
+		}
+
 	}
 }
