@@ -55,7 +55,7 @@ namespace Xenon {
 			List<HandlingMethod> evHandlers;
 			if (handlingMethods.TryGetValue(listener.GetType(), out evHandlers)) {
 				foreach (HandlingMethod meth in evHandlers) {
-					meth.listeners.Add(listener);
+					meth.listeners.Remove(listener);
 				}
 			}
 		}
