@@ -371,6 +371,7 @@
     <Compile Include="..\Assets\Xenon\Editor\Scripts\TimingDebuggerWindow.cs" />
     <Compile Include="..\Assets\Xenon\Editor\Scripts\XenonTools.cs" />
     <Compile Include="..\Assets\Xenon\Editor\Scripts\XenonWindow.cs" />
+	<Compile Include="..\Assets\Xenon\Editor\Scripts\GridGUI.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
