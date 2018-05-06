@@ -372,6 +372,7 @@
     <Compile Include="..\Assets\Xenon\Scripts\Singleton.cs" />
     <Compile Include="..\Assets\Xenon\Scripts\TimingDebugger.cs" />
     <Compile Include="..\Assets\Xenon\Scripts\XEvent.cs" />
+	<Compile Include="..\Assets\Xenon\Scripts\MathPlus.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

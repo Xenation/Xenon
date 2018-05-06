@@ -233,15 +233,18 @@ namespace Xenon.Editor {
 		}
 
 		private void SwitchRenderMode(SceneView sceneView) {
-			switch (sceneView.renderMode) {
+			SceneView.CameraMode camMode;
+			camMode = sceneView.cameraMode;
+			switch (camMode.drawMode) {
 				default:
 				case DrawCameraMode.Textured:
-					sceneView.renderMode = DrawCameraMode.TexturedWire;
+					camMode.drawMode = DrawCameraMode.TexturedWire;
 					break;
 				case DrawCameraMode.TexturedWire:
-					sceneView.renderMode = DrawCameraMode.Textured;
+					camMode.drawMode = DrawCameraMode.Textured;
 					break;
 			}
+			sceneView.cameraMode = camMode;
 			sceneView.Repaint();
 		}
 

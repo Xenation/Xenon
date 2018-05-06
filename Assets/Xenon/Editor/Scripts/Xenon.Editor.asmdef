@@ -1,0 +1,12 @@
+{
+    "name": "Xenon.Editor",
+    "references": [
+        "Xenon"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false
+}
