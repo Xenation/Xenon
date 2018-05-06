@@ -362,6 +362,7 @@
     <Compile Include="..\Assets\Xenon\Scripts\IEventListener.cs" />
     <Compile Include="..\Assets\Xenon\Scripts\IEventSender.cs" />
     <Compile Include="..\Assets\Xenon\Scripts\Process.cs" />
+	<Compile Include="..\Assets\Xenon\Scripts\Process\CompositeProcess.cs" />
     <Compile Include="..\Assets\Xenon\Scripts\Process\FadeInProcess.cs" />
     <Compile Include="..\Assets\Xenon\Scripts\Process\FadeOutProcess.cs" />
     <Compile Include="..\Assets\Xenon\Scripts\Process\InterpolateProcess.cs" />
