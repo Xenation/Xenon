@@ -23,6 +23,10 @@ namespace Xenon.Editor {
 
 		// Surface Move
 		private bool allowSurfaceMove = true;
+		[SerializeField]
+		private float surfaceMoveRange = 1000f;
+		private SerializedProperty surfaceMoveRangeProp;
+		private bool surfaceMoveRotateWithNormal = false;
 		private bool surfaceMoveUseCustomLayer = false;
 		private string[] availableLayersNames;
 		private int selectedLayersNamesMask = 0;
@@ -51,9 +55,13 @@ namespace Xenon.Editor {
 			colorX = GetPrefColor("Scene/X Axis");
 			colorY = GetPrefColor("Scene/Y Axis");
 			colorZ = GetPrefColor("Scene/Z Axis");
-			serializedObject = new SerializedObject(this);
+
 			cameraToFit = Camera.main;
 			customCameraToFit = Camera.main;
+
+			// Serialized Properties
+			serializedObject = new SerializedObject(this);
+			surfaceMoveRangeProp = serializedObject.FindProperty("surfaceMoveRange");
 			cameraToFitProp = serializedObject.FindProperty("customCameraToFit");
 		}
 
@@ -93,7 +101,8 @@ namespace Xenon.Editor {
 			allowSurfaceMove = EditorGUILayout.ToggleLeft("Surface Move", allowSurfaceMove, EditorStyles.boldLabel);
 			if (allowSurfaceMove) {
 				EditorGUI.indentLevel = 1;
-				//allowSurfaceMove = EditorGUILayout.ToggleLeft("Allow Surface Move", allowSurfaceMove);
+				surfaceMoveRange = EditorGUILayout.FloatField("Range", surfaceMoveRange);
+				surfaceMoveRotateWithNormal = EditorGUILayout.ToggleLeft("Rotate With Surface Normal", surfaceMoveRotateWithNormal);
 				surfaceMoveUseCustomLayer = EditorGUILayout.ToggleLeft("Use Custom LayerMask", surfaceMoveUseCustomLayer);
 				if (surfaceMoveUseCustomLayer) {
 					EditorGUI.indentLevel = 2;
@@ -218,9 +227,12 @@ namespace Xenon.Editor {
 						if (surfaceMoveUseCustomLayer) {
 							mask = customSurfaceMoveLayerMask;
 						}
-						if (Physics.Raycast(ray, out hit, 1000f, mask)) {
+						if (Physics.Raycast(ray, out hit, surfaceMoveRange, mask)) {
 							Undo.RecordObject(selected.transform, "Surface Move");
 							selected.transform.position = hit.point;
+							if (surfaceMoveRotateWithNormal) {
+								selected.transform.rotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
+							}
 							Repaint();
 						}
 					}
