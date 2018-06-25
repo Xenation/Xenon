@@ -365,13 +365,14 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.Editor.cs" />
     <!-- XENON -->
-    <Compile Include="..\Assets\Xenon\Editor\Scripts\Essentials.cs" />
+    <Compile Include="..\Assets\Xenon\Editor\Scripts\EdGUIPlus.cs" />
+	<Compile Include="..\Assets\Xenon\Editor\Scripts\Essentials.cs" />
+	<Compile Include="..\Assets\Xenon\Editor\Scripts\GridGUI.cs" />
     <Compile Include="..\Assets\Xenon\Editor\Scripts\MenuItems.cs" />
     <Compile Include="..\Assets\Xenon\Editor\Scripts\ScreenshotTool.cs" />
     <Compile Include="..\Assets\Xenon\Editor\Scripts\TimingDebuggerWindow.cs" />
     <Compile Include="..\Assets\Xenon\Editor\Scripts\XenonTools.cs" />
     <Compile Include="..\Assets\Xenon\Editor\Scripts\XenonWindow.cs" />
-	<Compile Include="..\Assets\Xenon\Editor\Scripts\GridGUI.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

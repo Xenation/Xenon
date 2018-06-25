@@ -361,6 +361,7 @@
     <Compile Include="..\Assets\Xenon\Scripts\EventManager.cs" />
     <Compile Include="..\Assets\Xenon\Scripts\IEventListener.cs" />
     <Compile Include="..\Assets\Xenon\Scripts\IEventSender.cs" />
+	<Compile Include="..\Assets\Xenon\Scripts\MathPlus.cs" />
     <Compile Include="..\Assets\Xenon\Scripts\Process.cs" />
 	<Compile Include="..\Assets\Xenon\Scripts\Process\CompositeProcess.cs" />
     <Compile Include="..\Assets\Xenon\Scripts\Process\FadeInProcess.cs" />
@@ -373,7 +374,6 @@
     <Compile Include="..\Assets\Xenon\Scripts\Singleton.cs" />
     <Compile Include="..\Assets\Xenon\Scripts\TimingDebugger.cs" />
     <Compile Include="..\Assets\Xenon\Scripts\XEvent.cs" />
-	<Compile Include="..\Assets\Xenon\Scripts\MathPlus.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
