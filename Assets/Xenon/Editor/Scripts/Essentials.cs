@@ -6,6 +6,8 @@ using UnityEngine;
 namespace Xenon.Editor {
 	public class Essentials : XenonWindow<Essentials> {
 
+		private const int HIT_ARRAY_SIZE = 20;
+
 		protected override float minWidth { get { return 300f; } }
 		protected override float minHeight { get { return 275f; } }
 		protected override string titleStr { get { return "Essentials"; } }
@@ -20,6 +22,7 @@ namespace Xenon.Editor {
 		private bool shortcutsEnabled = true;
 		private bool ctrl = false;
 		private bool shift = false;
+		private GameObject selected = null;
 
 		// Surface Move
 		private bool allowSurfaceMove = true;
@@ -32,6 +35,9 @@ namespace Xenon.Editor {
 		private int selectedLayersNamesMask = 0;
 		private int customSurfaceMoveLayerMask = 0;
 		private bool surfaceMove = false;
+		private RaycastHit[] surfaceHits = new RaycastHit[HIT_ARRAY_SIZE];
+		private List<Collider> surfaceMoveIgnoredColliders = new List<Collider>();
+		private GameObject surfaceMoveIgnoredGO = null;
 
 		// Camera Fit
 		private bool allowCameraFit = true;
@@ -41,8 +47,6 @@ namespace Xenon.Editor {
 		private Camera customCameraToFit;
 		private SerializedProperty cameraToFitProp;
 		private bool applyCameraParameters;
-
-		private GameObject selected = null;
 
 		public void ResetModifiers() {
 			ctrl = false;
@@ -101,7 +105,7 @@ namespace Xenon.Editor {
 			allowSurfaceMove = EditorGUILayout.ToggleLeft("Surface Move", allowSurfaceMove, EditorStyles.boldLabel);
 			if (allowSurfaceMove) {
 				EditorGUI.indentLevel = 1;
-				surfaceMoveRange = EditorGUILayout.FloatField("Range", surfaceMoveRange);
+				EditorGUILayout.PropertyField(surfaceMoveRangeProp, new GUIContent("Range"));
 				surfaceMoveRotateWithNormal = EditorGUILayout.ToggleLeft("Rotate With Surface Normal", surfaceMoveRotateWithNormal);
 				surfaceMoveUseCustomLayer = EditorGUILayout.ToggleLeft("Use Custom LayerMask", surfaceMoveUseCustomLayer);
 				if (surfaceMoveUseCustomLayer) {
@@ -157,7 +161,11 @@ namespace Xenon.Editor {
 		}
 
 		private void OnSceneGUI(SceneView scene) {
-			selected = Selection.activeGameObject;
+			GameObject nSelected = Selection.activeGameObject;
+			if (selected != nSelected) {
+				selected = nSelected;
+				SelectionChanged();
+			}
 
 			UpdateHandles(scene);
 
@@ -203,6 +211,11 @@ namespace Xenon.Editor {
 					if (shift && selected != null && Tools.current == Tool.Move) {
 						surfaceMove = true;
 						Tools.hidden = true;
+						// Update Ignored Colliders
+						if (surfaceMoveIgnoredGO != selected) {
+							selected.GetComponentsInChildren(surfaceMoveIgnoredColliders);
+							surfaceMoveIgnoredGO = selected;
+						}
 					}
 				}
 
@@ -222,16 +235,27 @@ namespace Xenon.Editor {
 					pos = Handles.Slider(pos, Vector3.up, arrowSize, Handles.ArrowHandleCap, 0f);
 					if (EditorGUI.EndChangeCheck()) {
 						Ray ray = view.camera.ViewportPointToRay(view.camera.WorldToViewportPoint(pos));
-						RaycastHit hit;
-						int mask = ~(1 << selected.layer); // Everything exept the layer of the selected
+						int mask = ~0;
 						if (surfaceMoveUseCustomLayer) {
 							mask = customSurfaceMoveLayerMask;
 						}
-						if (Physics.Raycast(ray, out hit, surfaceMoveRange, mask)) {
+						int surfaceHitsCount = Physics.RaycastNonAlloc(ray, surfaceHits, surfaceMoveRange, mask);
+						if (surfaceHitsCount != 0) {
+							Vector3 hitPoint = selected.transform.position;
+							Vector3 hitNormal = selected.transform.up;
+							float curDistance = surfaceMoveRange;
+							for (int i = 0; i < surfaceHitsCount; i++) {
+								if (surfaceMoveIgnoredColliders.Contains(surfaceHits[i].collider)) continue;
+								if (surfaceHits[i].distance < curDistance) {
+									curDistance = surfaceHits[i].distance;
+									hitPoint = surfaceHits[i].point;
+									hitNormal = surfaceHits[i].normal;
+								}
+							}
 							Undo.RecordObject(selected.transform, "Surface Move");
-							selected.transform.position = hit.point;
+							selected.transform.position = hitPoint;
 							if (surfaceMoveRotateWithNormal) {
-								selected.transform.rotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
+								selected.transform.rotation = Quaternion.FromToRotation(Vector3.up, hitNormal);
 							}
 							Repaint();
 						}
@@ -263,6 +287,10 @@ namespace Xenon.Editor {
 		private void DeselectAll() {
 			Selection.activeGameObject = null;
 			selected = null;
+		}
+
+		private void SelectionChanged() {
+			// Nothing
 		}
 
 		private void PlaceCameraFromSceneView(SceneView view, Camera cam, bool applyCamParams) {
