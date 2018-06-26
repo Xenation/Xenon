@@ -7,7 +7,7 @@ namespace Xenon.Editor {
 
 		protected override string Title { get { return "Camera Tools"; } }
 		
-		private bool cameraFitUseCustomCamera = false;
+		private bool useCustomCamera = false;
 		[SerializeField]
 		private Camera customCameraToFit;
 		private SerializedProperty customCameraToFitProp; // SerializedProp used here only to allow simple camera only field (does not save selection)
@@ -20,15 +20,15 @@ namespace Xenon.Editor {
 		}
 
 		protected override void OnInspectorGUI() {
-			cameraFitUseCustomCamera = EditorGUILayout.ToggleLeft("Use Custom Camera", cameraFitUseCustomCamera);
-			if (cameraFitUseCustomCamera) {
+			useCustomCamera = EditorGUILayout.ToggleLeft("Use Custom Camera", useCustomCamera);
+			if (useCustomCamera) {
 				EditorGUI.indentLevel = 2;
 				EditorGUILayout.PropertyField(customCameraToFitProp);
 			}
 			EditorGUI.indentLevel = 1;
 			applyCameraParameters = EditorGUILayout.ToggleLeft("Apply Camera Parameters", applyCameraParameters);
 			if (EdGUIPlus.Button("Fit Camera", EditorStyles.miniButton)) {
-				if (cameraFitUseCustomCamera) {
+				if (useCustomCamera) {
 					PlaceCameraFromSceneView(SceneView.lastActiveSceneView, customCameraToFit, applyCameraParameters);
 				} else {
 					PlaceCameraFromSceneView(SceneView.lastActiveSceneView, Camera.main, applyCameraParameters);

@@ -15,17 +15,17 @@ namespace Xenon.Editor {
 
 		protected override string Title { get { return "Surface Move"; } }
 		
-		private float surfaceMoveRange = 1000f;
-		private bool surfaceMoveRotateWithNormal = false;
-		private SurfaceMoveMode surfaceMoveMode = SurfaceMoveMode.Pivot;
-		private bool surfaceMoveUseCustomLayer = false;
+		private float range = 1000f;
+		private bool rotateWithSurfaceNormal = false;
+		private SurfaceMoveMode PlacementMode = SurfaceMoveMode.Pivot;
+		private bool useCustomLayer = false;
 		private string[] availableLayersNames;
 		private int selectedLayersNamesMask = 0;
-		private int customSurfaceMoveLayerMask = 0;
+		private int customLayerMask = 0;
 		private bool surfaceMove = false;
 		private RaycastHit[] surfaceHits = new RaycastHit[HIT_ARRAY_SIZE];
-		private List<Collider> surfaceMoveIgnoredColliders = new List<Collider>();
-		private float surfaceMoveSelectedLowestBound = 0f;
+		private List<Collider> ignoredColliders = new List<Collider>();
+		private float selectedLowestBound = 0f;
 
 		public SurfaceMoveModule(Essentials ess) : base(ess) { }
 
@@ -34,15 +34,15 @@ namespace Xenon.Editor {
 		}
 
 		protected override void OnInspectorGUI() {
-			surfaceMoveRange = EditorGUILayout.FloatField(new GUIContent("Range", "Range of the raycast"), surfaceMoveRange);
-			surfaceMoveMode = EdGUIPlus.EnumButtonsField("Placement Mode", surfaceMoveMode, "Pivot", "BoxCol", "BoxRend");
-			surfaceMoveRotateWithNormal = EditorGUILayout.ToggleLeft("Rotate With Surface Normal", surfaceMoveRotateWithNormal);
-			surfaceMoveUseCustomLayer = EditorGUILayout.ToggleLeft("Use Custom LayerMask", surfaceMoveUseCustomLayer);
-			if (surfaceMoveUseCustomLayer) {
+			range = EditorGUILayout.FloatField(new GUIContent("Range", "Range of the raycast"), range);
+			PlacementMode = EdGUIPlus.EnumButtonsField("Placement Mode", PlacementMode, "Pivot", "BoxCol", "BoxRend");
+			rotateWithSurfaceNormal = EditorGUILayout.ToggleLeft("Rotate With Surface Normal", rotateWithSurfaceNormal);
+			useCustomLayer = EditorGUILayout.ToggleLeft("Use Custom LayerMask", useCustomLayer);
+			if (useCustomLayer) {
 				EditorGUI.indentLevel = 2;
 				availableLayersNames = GetAllLayerNames();
 				selectedLayersNamesMask = EditorGUILayout.MaskField("Layer Mask", selectedLayersNamesMask, availableLayersNames);
-				customSurfaceMoveLayerMask = GetSelectedLayerMask();
+				customLayerMask = GetSelectedLayerMask();
 			}
 		}
 
@@ -63,15 +63,15 @@ namespace Xenon.Editor {
 						surfaceMove = true;
 						Tools.hidden = true;
 						// Update Ignored Colliders
-						essentials.selected.GetComponentsInChildren(surfaceMoveIgnoredColliders);
-						switch (surfaceMoveMode) {
+						essentials.selected.GetComponentsInChildren(ignoredColliders);
+						switch (PlacementMode) {
 							case SurfaceMoveMode.Pivot:
 								break;
 							case SurfaceMoveMode.BoxCollider:
-								surfaceMoveSelectedLowestBound = GetLowestCollisionBound(essentials.selected);
+								selectedLowestBound = GetLowestCollisionBound(essentials.selected);
 								break;
 							case SurfaceMoveMode.BoxRenderer:
-								surfaceMoveSelectedLowestBound = GetLowestRenderingBound(essentials.selected);
+								selectedLowestBound = GetLowestRenderingBound(essentials.selected);
 								break;
 						}
 					}
@@ -92,21 +92,21 @@ namespace Xenon.Editor {
 					Handles.color = essentials.colorY;
 					pos = Handles.Slider(pos, Vector3.up, arrowSize, Handles.ArrowHandleCap, 0f);
 					if (EditorGUI.EndChangeCheck()) {
-						if (surfaceMoveMode != SurfaceMoveMode.Pivot) {
-							pos.y += surfaceMoveSelectedLowestBound;
+						if (PlacementMode != SurfaceMoveMode.Pivot) {
+							pos.y += selectedLowestBound;
 						}
 						Ray ray = view.camera.ViewportPointToRay(view.camera.WorldToViewportPoint(pos));
 						int mask = ~0;
-						if (surfaceMoveUseCustomLayer) {
-							mask = customSurfaceMoveLayerMask;
+						if (useCustomLayer) {
+							mask = customLayerMask;
 						}
-						int surfaceHitsCount = Physics.RaycastNonAlloc(ray, surfaceHits, surfaceMoveRange, mask);
+						int surfaceHitsCount = Physics.RaycastNonAlloc(ray, surfaceHits, range, mask);
 						if (surfaceHitsCount != 0) {
 							Vector3 hitPoint = essentials.selected.transform.position;
 							Vector3 hitNormal = essentials.selected.transform.up;
-							float curDistance = surfaceMoveRange;
+							float curDistance = range;
 							for (int i = 0; i < surfaceHitsCount; i++) {
-								if (surfaceMoveIgnoredColliders.Contains(surfaceHits[i].collider)) continue;
+								if (ignoredColliders.Contains(surfaceHits[i].collider)) continue;
 								if (surfaceHits[i].distance < curDistance) {
 									curDistance = surfaceHits[i].distance;
 									hitPoint = surfaceHits[i].point;
@@ -114,13 +114,13 @@ namespace Xenon.Editor {
 								}
 							}
 
-							if (surfaceMoveMode != SurfaceMoveMode.Pivot) {
-								hitPoint.y -= surfaceMoveSelectedLowestBound;
+							if (PlacementMode != SurfaceMoveMode.Pivot) {
+								hitPoint.y -= selectedLowestBound;
 							}
 
 							Undo.RecordObject(essentials.selected.transform, "Surface Move");
 							essentials.selected.transform.position = hitPoint;
-							if (surfaceMoveRotateWithNormal) {
+							if (rotateWithSurfaceNormal) {
 								essentials.selected.transform.rotation = Quaternion.FromToRotation(Vector3.up, hitNormal);
 							}
 							essentials.Repaint();
