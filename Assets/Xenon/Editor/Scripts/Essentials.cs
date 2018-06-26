@@ -6,6 +6,12 @@ using UnityEngine;
 namespace Xenon.Editor {
 	public class Essentials : XenonWindow<Essentials> {
 
+		private enum SurfaceMoveMode {
+			Pivot,
+			BoxCollider,
+			BoxRenderer
+		}
+
 		private const int HIT_ARRAY_SIZE = 20;
 
 		protected override float minWidth { get { return 300f; } }
@@ -27,9 +33,11 @@ namespace Xenon.Editor {
 		// Surface Move
 		private bool allowSurfaceMove = true;
 		[SerializeField]
+		[Tooltip("Range of the raycast")]
 		private float surfaceMoveRange = 1000f;
 		private SerializedProperty surfaceMoveRangeProp;
 		private bool surfaceMoveRotateWithNormal = false;
+		private SurfaceMoveMode surfaceMoveMode = SurfaceMoveMode.Pivot;
 		private bool surfaceMoveUseCustomLayer = false;
 		private string[] availableLayersNames;
 		private int selectedLayersNamesMask = 0;
@@ -37,7 +45,7 @@ namespace Xenon.Editor {
 		private bool surfaceMove = false;
 		private RaycastHit[] surfaceHits = new RaycastHit[HIT_ARRAY_SIZE];
 		private List<Collider> surfaceMoveIgnoredColliders = new List<Collider>();
-		private GameObject surfaceMoveIgnoredGO = null;
+		private float surfaceMoveSelectedLowestBound = 0f;
 
 		// Camera Fit
 		private bool allowCameraFit = true;
@@ -106,6 +114,7 @@ namespace Xenon.Editor {
 			if (allowSurfaceMove) {
 				EditorGUI.indentLevel = 1;
 				EditorGUILayout.PropertyField(surfaceMoveRangeProp, new GUIContent("Range"));
+				surfaceMoveMode = EdGUIPlus.EnumButtonsField("Placement Mode", surfaceMoveMode, "Pivot", "BoxCol", "BoxRend");
 				surfaceMoveRotateWithNormal = EditorGUILayout.ToggleLeft("Rotate With Surface Normal", surfaceMoveRotateWithNormal);
 				surfaceMoveUseCustomLayer = EditorGUILayout.ToggleLeft("Use Custom LayerMask", surfaceMoveUseCustomLayer);
 				if (surfaceMoveUseCustomLayer) {
@@ -212,9 +221,16 @@ namespace Xenon.Editor {
 						surfaceMove = true;
 						Tools.hidden = true;
 						// Update Ignored Colliders
-						if (surfaceMoveIgnoredGO != selected) {
-							selected.GetComponentsInChildren(surfaceMoveIgnoredColliders);
-							surfaceMoveIgnoredGO = selected;
+						selected.GetComponentsInChildren(surfaceMoveIgnoredColliders);
+						switch (surfaceMoveMode) {
+							case SurfaceMoveMode.Pivot:
+								break;
+							case SurfaceMoveMode.BoxCollider:
+								surfaceMoveSelectedLowestBound = GetLowestCollisionBound(selected);
+								break;
+							case SurfaceMoveMode.BoxRenderer:
+								surfaceMoveSelectedLowestBound = GetLowestRenderingBound(selected);
+								break;
 						}
 					}
 				}
@@ -234,6 +250,9 @@ namespace Xenon.Editor {
 					Handles.color = colorY;
 					pos = Handles.Slider(pos, Vector3.up, arrowSize, Handles.ArrowHandleCap, 0f);
 					if (EditorGUI.EndChangeCheck()) {
+						if (surfaceMoveMode != SurfaceMoveMode.Pivot) {
+							pos.y += surfaceMoveSelectedLowestBound;
+						}
 						Ray ray = view.camera.ViewportPointToRay(view.camera.WorldToViewportPoint(pos));
 						int mask = ~0;
 						if (surfaceMoveUseCustomLayer) {
@@ -252,6 +271,11 @@ namespace Xenon.Editor {
 									hitNormal = surfaceHits[i].normal;
 								}
 							}
+
+							if (surfaceMoveMode != SurfaceMoveMode.Pivot) {
+								hitPoint.y -= surfaceMoveSelectedLowestBound;
+							}
+
 							Undo.RecordObject(selected.transform, "Surface Move");
 							selected.transform.position = hitPoint;
 							if (surfaceMoveRotateWithNormal) {
@@ -311,5 +335,71 @@ namespace Xenon.Editor {
 			}
 		}
 		
+		private float GetLowestCollisionBound(GameObject gameObject) {
+			float lowestBound = 0f;
+			float currentBound = 0f;
+			List<Collider> colliders = new List<Collider>();
+			gameObject.GetComponentsInChildren(colliders);
+			foreach (Collider collider in colliders) {
+				currentBound = collider.bounds.min.y - gameObject.transform.position.y;
+				if (currentBound < lowestBound) {
+					lowestBound = currentBound;
+				}
+			}
+			return lowestBound;
+		}
+
+		private Bounds GetEncompassingCollisionBounds(GameObject gameObject) {
+			Bounds encomBounds = new Bounds(gameObject.transform.position, Vector3.zero);
+			List<Collider> colliders = new List<Collider>();
+			gameObject.GetComponentsInChildren(colliders);
+			if (colliders.Count == 0) return encomBounds;
+			encomBounds = colliders[0].bounds;
+			for (int i = 1; i < colliders.Count; i++) {
+				encomBounds.min = new Vector3(
+					(colliders[i].bounds.min.x < encomBounds.min.x) ? colliders[i].bounds.min.x : encomBounds.min.x,
+					(colliders[i].bounds.min.y < encomBounds.min.y) ? colliders[i].bounds.min.y : encomBounds.min.y,
+					(colliders[i].bounds.min.z < encomBounds.min.z) ? colliders[i].bounds.min.z : encomBounds.min.z);
+				encomBounds.max = new Vector3(
+					(colliders[i].bounds.max.x > encomBounds.max.x) ? colliders[i].bounds.max.x : encomBounds.max.x,
+					(colliders[i].bounds.max.y > encomBounds.max.y) ? colliders[i].bounds.max.y : encomBounds.max.y,
+					(colliders[i].bounds.max.z > encomBounds.max.z) ? colliders[i].bounds.max.z : encomBounds.max.z);
+			}
+			return encomBounds;
+		}
+
+		private float GetLowestRenderingBound(GameObject gameObject) {
+			float lowestBound = 0f;
+			float currentBound = 0f;
+			List<Renderer> renderers = new List<Renderer>();
+			gameObject.GetComponentsInChildren(renderers);
+			foreach (Renderer renderer in renderers) {
+				currentBound = renderer.bounds.min.y - gameObject.transform.position.y;
+				if (currentBound < lowestBound) {
+					lowestBound = currentBound;
+				}
+			}
+			return lowestBound;
+		}
+
+		private Bounds GetEncompassingRenderingBounds(GameObject gameObject) {
+			Bounds encomBounds = new Bounds(gameObject.transform.position, Vector3.zero);
+			List<Renderer> renderers = new List<Renderer>();
+			gameObject.GetComponentsInChildren(renderers);
+			if (renderers.Count == 0) return encomBounds;
+			encomBounds = renderers[0].bounds;
+			for (int i = 1; i < renderers.Count; i++) {
+				encomBounds.min = new Vector3(
+					(renderers[i].bounds.min.x < encomBounds.min.x) ? renderers[i].bounds.min.x : encomBounds.min.x,
+					(renderers[i].bounds.min.y < encomBounds.min.y) ? renderers[i].bounds.min.y : encomBounds.min.y,
+					(renderers[i].bounds.min.z < encomBounds.min.z) ? renderers[i].bounds.min.z : encomBounds.min.z);
+				encomBounds.max = new Vector3(
+					(renderers[i].bounds.max.x > encomBounds.max.x) ? renderers[i].bounds.max.x : encomBounds.max.x,
+					(renderers[i].bounds.max.y > encomBounds.max.y) ? renderers[i].bounds.max.y : encomBounds.max.y,
+					(renderers[i].bounds.max.z > encomBounds.max.z) ? renderers[i].bounds.max.z : encomBounds.max.z);
+			}
+			return encomBounds;
+		}
+
 	}
 }

@@ -1,50 +1,67 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
 namespace Xenon.Editor {
 	public static class EdGUIPlus {
 
-		public static Enum EnumButtonsField(string label, Enum enVal, params string[] enLabels) {
+		public static T EnumButtonsField<T>(string label, T enVal, params string[] enLabels) {
 			Type enType = enVal.GetType();
-			Enum[] values = (Enum[]) Enum.GetValues(enType);
+			Array enArray = Enum.GetValues(enType);
+			List<T> values = new List<T>((T[]) enArray);
 
-			return values[EnumToggles(enLabels)];
+			return values[EnumToggles(label, enLabels, values.IndexOf(enVal))];
 		}
 
-		public static Enum EnumButtonsField(string label, Enum enVal) {
+		public static T EnumButtonsField<T>(string label, T enVal) {
 			Type enType = enVal.GetType();
-			Enum[] values = (Enum[]) Enum.GetValues(enType);
-			string[] enLabels = new string[values.Length];
-			for (int i = 0; i < values.Length; i++) {
+			Array enArray = Enum.GetValues(enType);
+			List<T> values = new List<T>((T[]) enArray);
+			string[] enLabels = new string[values.Count];
+			for (int i = 0; i < values.Count; i++) {
 				enLabels[i] = values[i].ToString();
 			}
 
-			return values[EnumToggles(enLabels)];
+			return values[EnumToggles(label, enLabels, values.IndexOf(enVal))];
 		}
 
-		private static int EnumToggles(string[] labels) {
-			bool togg = false;
-			int toggIndex = 0;
-			EditorGUILayout.BeginHorizontal();
-			if (labels.Length < 2) {
-				GUILayout.Toggle(togg, labels[0], EditorStyles.miniButton);
+		private static int EnumToggles(string mainLabel, string[] labels, int selectedIndex) {
+
+			Rect totalRect = EditorGUILayout.GetControlRect();
+			Rect fieldRect;
+			if (mainLabel == null || mainLabel == "") {
+				fieldRect = EditorGUI.IndentedRect(totalRect);
 			} else {
-				GUILayout.Toggle(togg, labels[0], EditorStyles.miniButtonLeft);
-				for (int i = 1; i < labels.Length - 1; i++) {
-					GUILayout.Toggle(togg, labels[i], EditorStyles.miniButtonMid);
-					if (togg) {
-						toggIndex = i;
-					}
+				fieldRect = EditorGUI.PrefixLabel(totalRect, new GUIContent(mainLabel));
+			}
+			float btnWidth = fieldRect.width / labels.Length;
+			Rect curRect = new Rect(fieldRect.x, fieldRect.y, btnWidth, fieldRect.height);
+
+			if (labels.Length < 2) { // Only One Button
+				GUI.Toggle(curRect, true, labels[0], EditorStyles.miniButton);
+			} else { // Normal
+				if (GUI.Toggle(curRect, (selectedIndex == 0), labels[0], EditorStyles.miniButtonLeft)) {
+					selectedIndex = 0;
 				}
-				GUILayout.Toggle(togg, labels[labels.Length - 1], EditorStyles.miniButtonRight);
-				if (togg) {
-					toggIndex = labels.Length - 1;
+				curRect.x += btnWidth;
+				for (int i = 1; i < labels.Length - 1; i++) {
+					if (GUI.Toggle(curRect, (selectedIndex == i), labels[i], EditorStyles.miniButtonMid)) {
+						selectedIndex = i;
+					}
+					curRect.x += btnWidth;
+				}
+				if (GUI.Toggle(curRect, (selectedIndex == labels.Length - 1), labels[labels.Length - 1], EditorStyles.miniButtonRight)) {
+					selectedIndex = labels.Length - 1;
 				}
 			}
-			EditorGUILayout.EndHorizontal();
 
-			return toggIndex;
+			return selectedIndex;
+		}
+
+		public static int IndentToPixels(int indent) { // Fix for GUILayout not using indents
+			//return (indent == 0) ? 4 : indent * 19 - (indent - 1) * 4; // Weird but works
+			return 4 + indent * 15;
 		}
 
 	}
