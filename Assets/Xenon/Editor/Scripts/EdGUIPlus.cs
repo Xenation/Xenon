@@ -59,6 +59,44 @@ namespace Xenon.Editor {
 			return selectedIndex;
 		}
 
+		public static bool Button(string text) {
+			return GUI.Button(EditorGUI.IndentedRect(EditorGUILayout.GetControlRect(false, 18f)), text);
+		}
+		public static bool Button(GUIContent content) {
+			return GUI.Button(EditorGUI.IndentedRect(EditorGUILayout.GetControlRect(false, 18f)), content);
+		}
+		public static bool Button(Texture texture) {
+			return GUI.Button(EditorGUI.IndentedRect(EditorGUILayout.GetControlRect(false, 18f)), texture);
+		}
+		public static bool Button(string text, GUIStyle style) {
+			return GUI.Button(EditorGUI.IndentedRect(EditorGUILayout.GetControlRect(false, 18f)), text, style);
+		}
+		public static bool Button(GUIContent content, GUIStyle style) {
+			return GUI.Button(EditorGUI.IndentedRect(EditorGUILayout.GetControlRect(false, 18f)), content, style);
+		}
+		public static bool Button(Texture texture, GUIStyle style) {
+			return GUI.Button(EditorGUI.IndentedRect(EditorGUILayout.GetControlRect(false, 18f)), texture, style);
+		}
+
+		public static bool InlineButton(string text) {
+			return GUI.Button(EditorGUI.IndentedRect(EditorGUILayout.GetControlRect(false)), text);
+		}
+		public static bool InlineButton(GUIContent content) {
+			return GUI.Button(EditorGUI.IndentedRect(EditorGUILayout.GetControlRect(false)), content);
+		}
+		public static bool InlineButton(Texture texture) {
+			return GUI.Button(EditorGUI.IndentedRect(EditorGUILayout.GetControlRect(false)), texture);
+		}
+		public static bool InlineButton(string text, GUIStyle style) {
+			return GUI.Button(EditorGUI.IndentedRect(EditorGUILayout.GetControlRect(false)), text, style);
+		}
+		public static bool InlineButton(GUIContent content, GUIStyle style) {
+			return GUI.Button(EditorGUI.IndentedRect(EditorGUILayout.GetControlRect(false)), content, style);
+		}
+		public static bool InlineButton(Texture texture, GUIStyle style) {
+			return GUI.Button(EditorGUI.IndentedRect(EditorGUILayout.GetControlRect(false)), texture, style);
+		}
+
 		public static int IndentToPixels(int indent) { // Fix for GUILayout not using indents
 			//return (indent == 0) ? 4 : indent * 19 - (indent - 1) * 4; // Weird but works
 			return 4 + indent * 15;
