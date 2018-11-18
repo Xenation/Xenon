@@ -12,6 +12,9 @@ namespace Xenon.Editor {
 		private Camera customCameraToFit;
 		private SerializedProperty customCameraToFitProp; // SerializedProp used here only to allow simple camera only field (does not save selection)
 		private bool applyCameraParameters;
+		private float sceneCameraNearPlane;
+		private float sceneCameraFarPlane;
+		private SceneView sceneOfPlanes;
 
 		public CameraToolsModule(Essentials ess) : base(ess) { }
 
@@ -34,10 +37,45 @@ namespace Xenon.Editor {
 					PlaceCameraFromSceneView(SceneView.lastActiveSceneView, Camera.main, applyCameraParameters);
 				}
 			}
+
+			if (sceneOfPlanes != null) {
+				Rect totalRect = EditorGUILayout.GetControlRect();
+				Rect fieldRect = EditorGUI.PrefixLabel(totalRect, new GUIContent("Scene Cam"));
+				EditorGUI.indentLevel = 0;
+				float floatFieldWidth = (fieldRect.width - 50f) / 2f;
+				Rect curRect = new Rect(fieldRect.x, fieldRect.y, 32f, fieldRect.height);
+				GUI.Label(curRect, "Near");
+				curRect.x += 32f;
+				curRect.width = floatFieldWidth - 32f;
+				float nSceneCameraNearPlane = EditorGUI.DelayedFloatField(curRect, sceneOfPlanes.camera.nearClipPlane);
+				curRect.x += floatFieldWidth - 17f;
+				curRect.width = 25f;
+				GUI.Label(curRect, "Far");
+				curRect.x += 25f;
+				curRect.width = floatFieldWidth - 40f;
+				float nSceneCameraFarPlane = EditorGUI.DelayedFloatField(curRect, sceneOfPlanes.camera.farClipPlane);
+				curRect.x += floatFieldWidth - 40f;
+				curRect.width = 50f;
+				if (nSceneCameraNearPlane != sceneOfPlanes.camera.nearClipPlane || nSceneCameraFarPlane != sceneOfPlanes.camera.farClipPlane) {
+					//sceneOfPlanes.camera.nearClipPlane = 0.1f;
+					//sceneOfPlanes.camera.farClipPlane = 20000f;
+					sceneOfPlanes.camera.projectionMatrix = Matrix4x4.Perspective(sceneOfPlanes.camera.fieldOfView, sceneOfPlanes.camera.aspect, nSceneCameraNearPlane, nSceneCameraFarPlane);
+					//sceneOfPlanes.camera.worldToCameraMatrix = Matrix4x4.Perspective(sceneOfPlanes.camera.fieldOfView, sceneOfPlanes.camera.aspect, nSceneCameraNearPlane, nSceneCameraFarPlane);
+					Debug.Log(sceneOfPlanes.camera.nearClipPlane);
+					Debug.Log(sceneOfPlanes.camera.farClipPlane);
+				}
+			}
 		}
 
 		public override void OnSceneGUI(SceneView scene) {
-			
+			float nSceneCameraNearPlane = scene.camera.nearClipPlane;
+			float nSceneCameraFarPlane = scene.camera.farClipPlane;
+			if (nSceneCameraNearPlane != sceneCameraNearPlane || nSceneCameraFarPlane != sceneCameraFarPlane) {
+				sceneCameraNearPlane = nSceneCameraNearPlane;
+				sceneCameraFarPlane = nSceneCameraFarPlane;
+				sceneOfPlanes = scene;
+				essentials.Repaint();
+			}
 		}
 
 		private void PlaceCameraFromSceneView(SceneView view, Camera cam, bool applyCamParams) {
