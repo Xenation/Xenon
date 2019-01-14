@@ -38,9 +38,9 @@ namespace Xenon {
 			process.InvokeTerminateCallback();
 			if (process.State == ProcessState.TERMINATED) {
 				toRemove.Add(process);
-			}
-			foreach (Process attached in process.Attached) {
-				toStart.Add(attached);
+				foreach (Process attached in process.Attached) {
+					toStart.Add(attached);
+				}
 			}
 		}
 
