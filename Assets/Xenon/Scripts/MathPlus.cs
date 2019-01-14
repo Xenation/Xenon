@@ -1,7 +1,19 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace Xenon {
 	public static class MathPlus {
+
+		// TODO recheck that there are no copies of existing unity function
+
+		//// int \\\\
+		public static float Clamp(this int val, int min, int max) {
+			if (val > max) {
+				return max;
+			} else if (val < min) {
+				return min;
+			}
+			return val;
+		}
 
 		//// float \\\\
 		public static float Clamp(this float val, float min, float max) {
