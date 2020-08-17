@@ -44,8 +44,8 @@ namespace Xenon.Editor {
 		private void OnEnable() {
 			InitModules();
 
-			SceneView.onSceneGUIDelegate -= OnSceneGUI;
-			SceneView.onSceneGUIDelegate += OnSceneGUI;
+			SceneView.duringSceneGui -= OnSceneGUI;
+			SceneView.duringSceneGui += OnSceneGUI;
 			colorX = GetPrefColor("Scene/X Axis");
 			colorY = GetPrefColor("Scene/Y Axis");
 			colorZ = GetPrefColor("Scene/Z Axis");
@@ -72,7 +72,7 @@ namespace Xenon.Editor {
 		}
 
 		private void OnDestroy() {
-			SceneView.onSceneGUIDelegate -= OnSceneGUI;
+			SceneView.duringSceneGui -= OnSceneGUI;
 		}
 
 		private void OnGUI() {

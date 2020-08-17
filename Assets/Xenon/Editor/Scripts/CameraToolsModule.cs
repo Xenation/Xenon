@@ -8,8 +8,10 @@ namespace Xenon.Editor {
 		protected override string Title { get { return "Camera Tools"; } }
 		
 		private bool useCustomCamera = false;
+#pragma warning disable 0649
 		[SerializeField]
 		private Camera customCameraToFit;
+#pragma warning restore 0649
 		private SerializedProperty customCameraToFitProp; // SerializedProp used here only to allow simple camera only field (does not save selection)
 		private bool applyCameraParameters;
 

@@ -39,6 +39,8 @@ namespace Xenon.Test {
 		public void Update() {
 			TimingDebugger.Start("Tester - Update");
 
+			XDebug.DrawWireSphere(Vector3.zero, 1f, Color.red);
+
 			TimingDebugger.Stop();
 		}
 
