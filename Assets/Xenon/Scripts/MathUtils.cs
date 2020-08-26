@@ -72,6 +72,12 @@ namespace Xenon {
 			return ((v - snapPos).magnitude < snapDist) ? snapPos : v;
 		}
 
+		public static Vector2 Rotate(Vector2 v, float angle) {
+			float s = Mathf.Sin(angle * Mathf.Deg2Rad);
+			float c = Mathf.Cos(angle * Mathf.Deg2Rad);
+			return new Vector2(c * v.x - s * v.y, s * v.x + c * v.y);
+		}
+
 		//// Vector2Int \\\\
 		public static int MaxComponent(Vector2Int v) {
 			return Mathf.Max(v.x, v.y);
@@ -347,6 +353,12 @@ namespace Xenon {
 
 		public static Vector3 Unflat(this Vector2 v, float y = 0f) {
 			return new Vector3(v.x, y, v.y);
+		}
+
+		public static Vector2 Rotate(this Vector2 v, float angle) {
+			float s = Mathf.Sin(angle * Mathf.Deg2Rad);
+			float c = Mathf.Cos(angle * Mathf.Deg2Rad);
+			return new Vector2(c * v.x - s * v.y, s * v.x + c * v.y);
 		}
 
 		//// Vector2Int \\\\

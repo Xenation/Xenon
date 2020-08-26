@@ -65,7 +65,7 @@ namespace Xenon {
 
 #if UNITY_EDITOR
 		private static void OnSceneGUI(SceneView view) {
-			Debug.Log("SceneGUI - draw calls: " + drawCalls.Count);
+			//Debug.Log("SceneGUI - draw calls: " + drawCalls.Count);
 			while (drawCalls.Count > 0) {
 				ExecuteDrawCall(drawCalls.Dequeue());
 			}
