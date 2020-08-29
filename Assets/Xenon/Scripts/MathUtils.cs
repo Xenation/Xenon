@@ -54,6 +54,10 @@ namespace Xenon {
 			return new Vector2(v.x.Clamp(min, max), v.y.Clamp(min, max));
 		}
 
+		public static Vector2 Clamp(Vector2 v, Rect rect) {
+			return new Vector2(v.x.Clamp(rect.min.x, rect.max.x), v.y.Clamp(rect.min.y, rect.max.y));
+		}
+
 		public static Vector2 ClampMagnitude(Vector2 v, float minMag, float maxMag) {
 			float mag = v.magnitude;
 			return (mag > maxMag) ? v.normalized * maxMag : ((mag < minMag) ? v.normalized * minMag : v);
@@ -99,6 +103,10 @@ namespace Xenon {
 			return new Vector2Int((v.x < rect.min.x) ? rect.min.x : ((v.x > rect.max.x) ? rect.max.x : v.x), (v.y < rect.min.y) ? rect.min.y : ((v.y > rect.max.y) ? rect.max.y : v.y));
 		}
 
+		public static Vector2Int ClampMaxExcluded(Vector2Int v, RectInt rect) {
+			return new Vector2Int((v.x < rect.min.x) ? rect.min.x : ((v.x >= rect.max.x) ? rect.max.x - 1 : v.x), (v.y < rect.min.y) ? rect.min.y : ((v.y >= rect.max.y) ? rect.max.y - 1 : v.y));
+		}
+
 		//// Vector3 \\\\
 		public static float MaxComponent(Vector3 v) {
 			return Mathf.Max(Mathf.Max(v.x, v.y), v.z);
@@ -138,6 +146,12 @@ namespace Xenon {
 
 		public static Vector3 Clamp(Vector3 v, float min, float max) {
 			return new Vector3(v.x.Clamp(min, max), v.y.Clamp(min, max), v.z.Clamp(min, max));
+		}
+
+		public static Vector3 Clamp(Vector3 v, Bounds bounds) {
+			Vector3 min = bounds.min;
+			Vector3 max = bounds.max;
+			return new Vector3(v.x.Clamp(min.x, max.x), v.y.Clamp(min.y, max.y), v.z.Clamp(min.z, max.z));
 		}
 
 		public static Vector3 ClampMagnitude(Vector3 v, float minMag, float maxMag) {
@@ -220,6 +234,60 @@ namespace Xenon {
 		public static Vector4 RemapMagnitude(Vector4 v, float from1, float to1, float from2, float to2) {
 			float mag = v.magnitude.Remap(from1, to1, from2, to2);
 			return v.normalized * mag;
+		}
+
+		//// Rect \\\\
+		public static RectInt Floor(Rect r) {
+			return new RectInt(r.position.FloorToInt(), r.size.FloorToInt());
+		}
+
+		public static RectInt Ceil(Rect r) {
+			return new RectInt(r.position.CeilToInt(), r.size.CeilToInt());
+		}
+
+		public static RectInt Round(Rect r) {
+			return new RectInt(r.position.RoundToInt(), r.size.RoundToInt());
+		}
+
+		public static RectInt ToIntConservative(Rect r) {
+			return new RectInt(r.position.FloorToInt(), r.size.CeilToInt());
+		}
+
+		public static Rect Intersect(Rect r, Rect b) {
+			Vector2 nMin = Vector2.Max(r.min, b.min);
+			Vector2 nMax = Vector2.Min(r.max, b.max);
+			return Rect.MinMaxRect(nMin.x, nMin.y, nMax.x, nMax.y);
+		}
+
+		public static Rect Bounding(Rect r, Rect b) {
+			Vector2 nMin = Vector2.Min(r.min, b.min);
+			Vector2 nMax = Vector2.Max(r.max, b.max);
+			return Rect.MinMaxRect(nMin.x, nMin.y, nMax.x, nMax.y);
+		}
+
+		public static Vector2 ToNormalizedPoint(Rect r, Vector2 p) {
+			return Rect.PointToNormalized(r, p);
+		}
+
+		public static Vector2 FromNormalizedPoint(Rect r, Vector2 p) {
+			return Rect.NormalizedToPoint(r, p);
+		}
+
+		//// RectInt \\\\
+		public static Rect Float(RectInt r) {
+			return new Rect(r.position.Float(), r.size.Float());
+		}
+
+		public static RectInt Intersect(RectInt r, RectInt b) {
+			Vector2Int nMin = Vector2Int.Max(r.min, b.min);
+			Vector2Int nMax = Vector2Int.Min(r.max, b.max);
+			return new RectInt(nMin, nMax - nMin);
+		}
+
+		public static RectInt Bounding(RectInt r, RectInt b) {
+			Vector2Int nMin = Vector2Int.Min(r.min, b.min);
+			Vector2Int nMax = Vector2Int.Max(r.max, b.max);
+			return new RectInt(nMin, nMax - nMin);
 		}
 
 	}
@@ -329,6 +397,10 @@ namespace Xenon {
 			return new Vector2(v.x.Clamp(min, max), v.y.Clamp(min, max));
 		}
 
+		public static Vector2 Clamp(this Vector2 v, Rect rect) {
+			return new Vector2(v.x.Clamp(rect.min.x, rect.max.x), v.y.Clamp(rect.min.y, rect.max.y));
+		}
+
 		public static Vector2 ClampMagnitude(this Vector2 v, float minMag, float maxMag) {
 			float mag = v.magnitude;
 			return (mag > maxMag) ? v.normalized * maxMag : ((mag < minMag) ? v.normalized * minMag : v);
@@ -433,6 +505,12 @@ namespace Xenon {
 
 		public static Vector3 Clamp(this Vector3 v, float min, float max) {
 			return new Vector3(v.x.Clamp(min, max), v.y.Clamp(min, max), v.z.Clamp(min, max));
+		}
+
+		public static Vector3 Clamp(Vector3 v, Bounds bounds) {
+			Vector3 min = bounds.min;
+			Vector3 max = bounds.max;
+			return new Vector3(v.x.Clamp(min.x, max.x), v.y.Clamp(min.y, max.y), v.z.Clamp(min.z, max.z));
 		}
 
 		public static Vector3 ClampMagnitude(this Vector3 v, float minMag, float maxMag) {
@@ -547,6 +625,60 @@ namespace Xenon {
 
 		public static Vector3 ToVec3(this Vector4 v) {
 			return new Vector3(v.x, v.y, v.z);
+		}
+
+		//// Rect \\\\
+		public static RectInt Floor(this Rect r) {
+			return new RectInt(r.position.FloorToInt(), r.size.FloorToInt());
+		}
+
+		public static RectInt Ceil(this Rect r) {
+			return new RectInt(r.position.CeilToInt(), r.size.CeilToInt());
+		}
+
+		public static RectInt Round(this Rect r) {
+			return new RectInt(r.position.RoundToInt(), r.size.RoundToInt());
+		}
+
+		public static RectInt ToIntConservative(this Rect r) {
+			return new RectInt(r.position.FloorToInt(), r.size.CeilToInt());
+		}
+
+		public static Rect Intersect(this Rect r, Rect b) {
+			Vector2 nMin = Vector2.Max(r.min, b.min);
+			Vector2 nMax = Vector2.Min(r.max, b.max);
+			return Rect.MinMaxRect(nMin.x, nMin.y, nMax.x, nMax.y);
+		}
+
+		public static Rect Bounding(this Rect r, Rect b) {
+			Vector2 nMin = Vector2.Min(r.min, b.min);
+			Vector2 nMax = Vector2.Max(r.max, b.max);
+			return Rect.MinMaxRect(nMin.x, nMin.y, nMax.x, nMax.y);
+		}
+
+		public static Vector2 ToNormalizedPoint(this Rect r, Vector2 p) {
+			return Rect.PointToNormalized(r, p);
+		}
+
+		public static Vector2 FromNormalizedPoint(this Rect r, Vector2 p) {
+			return Rect.NormalizedToPoint(r, p);
+		}
+
+		//// RectInt \\\\
+		public static Rect Float(this RectInt r) {
+			return new Rect(r.position.Float(), r.size.Float());
+		}
+
+		public static RectInt Intersect(this RectInt r, RectInt b) {
+			Vector2Int nMin = Vector2Int.Max(r.min, b.min);
+			Vector2Int nMax = Vector2Int.Min(r.max, b.max);
+			return new RectInt(nMin, nMax - nMin);
+		}
+
+		public static RectInt Bounding(this RectInt r, RectInt b) {
+			Vector2Int nMin = Vector2Int.Min(r.min, b.min);
+			Vector2Int nMax = Vector2Int.Max(r.max, b.max);
+			return new RectInt(nMin, nMax - nMin);
 		}
 
 	}

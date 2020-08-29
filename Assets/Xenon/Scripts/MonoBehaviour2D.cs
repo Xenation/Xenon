@@ -3,10 +3,12 @@
 namespace Xenon {
 	public abstract class MonoBehaviour2D : MonoBehaviour {
 
-		public new Transform2D transform;
-
-		protected virtual void Awake() {
-			transform = new Transform2D(base.transform);
+		private Transform2D transform2D;
+		public new ref Transform2D transform {
+			get {
+				transform2D = new Transform2D(base.transform);
+				return ref transform2D;
+			}
 		}
 
 	}
