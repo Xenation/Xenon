@@ -12,6 +12,13 @@ namespace Xenon {
 		public Transform transform { get; private set; }
 
 		/// <summary>
+		/// The underlying GameObject
+		/// </summary>
+		public GameObject gameObject {
+			get { return transform.gameObject; }
+		}
+
+		/// <summary>
 		/// The parent of the transform.
 		/// </summary>
 		public Transform parent {

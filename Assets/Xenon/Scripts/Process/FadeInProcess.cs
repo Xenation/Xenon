@@ -22,7 +22,7 @@ namespace Xenon.Processes {
 			this.graphic = graphic;
 		}
 
-		public FadeInProcess(float duration, Graphic graphic, float endAlpha, bool fromCurrentAlpha) : base(duration, (fromCurrentAlpha) ? graphic.color.a : 1f, 0f) {
+		public FadeInProcess(float duration, Graphic graphic, float endAlpha, bool fromCurrentAlpha) : base(duration, (fromCurrentAlpha) ? graphic.color.a : 1f, endAlpha) {
 			this.graphic = graphic;
 		}
 
