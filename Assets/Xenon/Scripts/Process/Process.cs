@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Xenon {
+namespace Xenon.Processes {
 	public abstract class Process {
 
 		public delegate void OnTerminateCallback();

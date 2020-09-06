@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Xenon {
+namespace Xenon.Processes {
 	[AddComponentMenu("Xenon/Process/Rythmer")]
 	public class ProcessRythmer : MonoBehaviour {
 
