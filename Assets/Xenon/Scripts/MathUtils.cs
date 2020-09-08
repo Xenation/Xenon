@@ -193,6 +193,10 @@ namespace Xenon {
 			return new Vector3Int((v.x < box.min.x) ? box.min.x : ((v.x > box.max.x) ? box.max.x : v.x), (v.y < box.min.y) ? box.min.y : ((v.y > box.max.y) ? box.max.y : v.y), (v.z < box.min.z) ? box.min.z : ((v.z > box.max.z) ? box.max.z : v.z));
 		}
 
+		public static Vector3Int ClampMaxExcluded(Vector3Int v, BoundsInt box) {
+			return new Vector3Int((v.x < box.min.x) ? box.min.x : ((v.x >= box.max.x) ? box.max.x - 1 : v.x), (v.y < box.min.y) ? box.min.y : ((v.y >= box.max.y) ? box.max.y - 1 : v.y), (v.z < box.min.z) ? box.min.z : ((v.z >= box.max.z) ? box.max.z - 1 : v.z));
+		}
+
 		//// Vector4 \\\\
 		public static float MaxComponent(Vector4 v) {
 			return Mathf.Max(Mathf.Max(v.x, v.y), Mathf.Max(v.z, v.w));
@@ -454,6 +458,10 @@ namespace Xenon {
 			return new Vector2Int((v.x < rect.min.x) ? rect.min.x : ((v.x > rect.max.x) ? rect.max.x : v.x), (v.y < rect.min.y) ? rect.min.y : ((v.y > rect.max.y) ? rect.max.y : v.y));
 		}
 
+		public static Vector2Int ClampMaxExcluded(this Vector2Int v, RectInt rect) {
+			return new Vector2Int((v.x < rect.min.x) ? rect.min.x : ((v.x >= rect.max.x) ? rect.max.x - 1 : v.x), (v.y < rect.min.y) ? rect.min.y : ((v.y >= rect.max.y) ? rect.max.y - 1 : v.y));
+		}
+
 		public static Vector3Int ToVec3Int(this Vector2Int v, int z = 0) {
 			return new Vector3Int(v.x, v.y, z);
 		}
@@ -566,6 +574,10 @@ namespace Xenon {
 
 		public static Vector3Int Clamp(this Vector3Int v, BoundsInt box) {
 			return new Vector3Int((v.x < box.min.x) ? box.min.x : ((v.x > box.max.x) ? box.max.x : v.x), (v.y < box.min.y) ? box.min.y : ((v.y > box.max.y) ? box.max.y : v.y), (v.z < box.min.z) ? box.min.z : ((v.z > box.max.z) ? box.max.z : v.z));
+		}
+
+		public static Vector3Int ClampMaxExcluded(this Vector3Int v, BoundsInt box) {
+			return new Vector3Int((v.x < box.min.x) ? box.min.x : ((v.x >= box.max.x) ? box.max.x - 1 : v.x), (v.y < box.min.y) ? box.min.y : ((v.y >= box.max.y) ? box.max.y - 1 : v.y), (v.z < box.min.z) ? box.min.z : ((v.z >= box.max.z) ? box.max.z - 1 : v.z));
 		}
 
 		public static Vector2Int ToVec2Int(this Vector3Int v) {
