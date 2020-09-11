@@ -1,12 +1,7 @@
 {
-    "name": "Xenon.Editor",
-    "references": [
-        "Xenon",
-        "Xenon.Debug"
-    ],
-    "includePlatforms": [
-        "Editor"
-    ],
+    "name": "Xenon.Debug.Proxy",
+    "references": [],
+    "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

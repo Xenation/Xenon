@@ -8,6 +8,8 @@ namespace Xenon.Test {
 		public Graphic fadeInTest;
 		public Graphic fadeOutTest;
 
+		public Mesh testMesh;
+
 		private ProcessRythmer rythmer;
 
 		private Process fadeInProc;
@@ -39,7 +41,19 @@ namespace Xenon.Test {
 		public void Update() {
 			TimingDebugger.Start("Tester - Update");
 
-			XDebug.DrawWireSphere(Vector3.zero, 1f, Color.red);
+			VisualDebug.WireSphere(Vector3.zero, 2f, Color.red);
+
+			VisualDebug.WireMesh(testMesh, Vector3.zero, Quaternion.identity, Vector3.one, Color.red);
+
+			//VisualDebug.DrawLine(Vector3.zero, Vector3.one * 10f, Color.blue, Color.red);
+			VisualDebug.Wire(new VisualDebug.WireVertex(Vector3.up, Color.blue), new VisualDebug.WireVertex(Vector3.up * 6f + Vector3.left * 2.5f, Color.red), new VisualDebug.WireVertex(Vector3.up * 1f + Vector3.left * 5f, Color.green), new VisualDebug.WireVertex(Vector3.up, Color.blue));
+			VisualDebug.Circle(Vector3.up * 2f, Vector3.up, 1f, Color.yellow);
+
+			VisualDebug.WireCube(Vector3.up * 2f, Vector3.one, Color.cyan);
+			VisualDebug.WireSphere(Vector3.right * 2f, 1f, Color.yellow);
+
+			Camera mainCam = Camera.main;
+			VisualDebug.Frustum(mainCam.worldToCameraMatrix, mainCam.projectionMatrix, mainCam.nearClipPlane, mainCam.farClipPlane, Color.red, Color.green);
 
 			TimingDebugger.Stop();
 		}

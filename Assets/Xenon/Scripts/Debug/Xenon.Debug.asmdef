@@ -1,8 +1,7 @@
 {
-    "name": "Xenon.Editor",
+    "name": "Xenon.Debug",
     "references": [
-        "Xenon",
-        "Xenon.Debug"
+        "GUID:d9a95ce8a2c394c45b5b1b4d906dab84"
     ],
     "includePlatforms": [
         "Editor"
