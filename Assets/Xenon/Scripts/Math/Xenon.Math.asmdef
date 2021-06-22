@@ -1,10 +1,7 @@
 {
-    "name": "Xenon",
+    "name": "Xenon.Math",
     "rootNamespace": "",
-    "references": [
-        "GUID:2bafac87e7f4b9b418d9448d219b01ab",
-        "GUID:70b9c69b815f2924dba3d5b4f8079862"
-    ],
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

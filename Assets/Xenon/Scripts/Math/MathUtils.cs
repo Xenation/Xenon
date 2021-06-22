@@ -241,6 +241,12 @@ namespace Xenon {
 		}
 
 		//// Rect \\\\
+		public static float SignedDistance(Rect r, Vector2 p) {
+			p = p - r.position;
+			Vector2 q = p.Abs() - r.size * 0.5f;
+			return q.Max(Vector2.zero).magnitude + Mathf.Min(q.MaxComponent(), 0.0f);
+		}
+
 		public static RectInt Floor(Rect r) {
 			return new RectInt(r.position.FloorToInt(), r.size.FloorToInt());
 		}
@@ -640,6 +646,12 @@ namespace Xenon {
 		}
 
 		//// Rect \\\\
+		public static float SignedDistance(this Rect r, Vector2 p) {
+			p = p - r.position;
+			Vector2 q = p.Abs() - r.size * 0.5f;
+			return q.Max(Vector2.zero).magnitude + Mathf.Min(q.MaxComponent(), 0.0f);
+		}
+
 		public static RectInt Floor(this Rect r) {
 			return new RectInt(r.position.FloorToInt(), r.size.FloorToInt());
 		}

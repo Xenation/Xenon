@@ -105,5 +105,6 @@ namespace Xenon {
 		public float Distance(Vector2 p) {
 			return (p - center).magnitude - radius;
 		}
+
 	}
 }
