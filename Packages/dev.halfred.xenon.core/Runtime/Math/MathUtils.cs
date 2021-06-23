@@ -17,6 +17,31 @@ namespace Xenon {
 			return ((v - snapPos).Abs() < snapDist) ? snapPos : v;
 		}
 
+		public static float Fade(float t) {
+			return t * t * t * (t * (t * 6f - 15f) + 10f);
+		}
+
+		public static float SmootherStep(float edge0, float edge1, float x) {
+			x = Mathf.Clamp01((x - edge0) / (edge1 - edge0));
+			return x * x * x * (x * (x * 6f - 15f) + 10f);
+		}
+
+		public static void SwapToMinMax(ref int min, ref int max) {
+			if (max < min) {
+				int tmp = min;
+				min = max;
+				max = tmp;
+			}
+		}
+
+		public static void SwapToMinMax(ref float min, ref float max) {
+			if (max < min) {
+				float tmp = min;
+				min = max;
+				max = tmp;
+			}
+		}
+
 		//// Vector2 \\\\
 		public static float MaxComponent(Vector2 v) {
 			return Mathf.Max(v.x, v.y);
@@ -24,6 +49,14 @@ namespace Xenon {
 
 		public static Vector2 Abs(Vector2 v) {
 			return new Vector2(v.x.Abs(), v.y.Abs());
+		}
+
+		public static Vector2 Sign(Vector2 v) {
+			return new Vector2((v.x < 0f) ? -1f : 1f, (v.y < 0f) ? -1f : 1f);
+		}
+
+		public static Vector2 Inverse(Vector2 v) {
+			return new Vector2(1f / v.x, 1f / v.y);
 		}
 
 		public static Vector2 Ceil(Vector2 v) {
@@ -50,6 +83,10 @@ namespace Xenon {
 			return new Vector2Int(Mathf.RoundToInt(v.x), Mathf.RoundToInt(v.y));
 		}
 
+		public static Vector2 Step(Vector2 i, Vector2 edge) {
+			return new Vector2((i.x < edge.x) ? 0f : 1f, (i.y < edge.y) ? 0f : 1f);
+		}
+
 		public static Vector2 Clamp(Vector2 v, float min, float max) {
 			return new Vector2(v.x.Clamp(min, max), v.y.Clamp(min, max));
 		}
@@ -65,6 +102,10 @@ namespace Xenon {
 
 		public static Vector2 Remap(Vector2 v, float from1, float to1, float from2, float to2) {
 			return new Vector2(v.x.Remap(from1, to1, from2, to2), v.y.Remap(from1, to1, from2, to2));
+		}
+
+		public static Vector2 Remap(Vector2 v, Vector2 from1, Vector2 to1, Vector2 from2, Vector2 to2) {
+			return new Vector2(v.x.Remap(from1.x, to1.x, from2.x, to2.x), v.y.Remap(from1.y, to1.y, from2.y, to2.y));
 		}
 
 		public static Vector2 RemapMagnitude(Vector2 v, float from1, float to1, float from2, float to2) {
@@ -87,12 +128,20 @@ namespace Xenon {
 			return Mathf.Max(v.x, v.y);
 		}
 
+		public static int Dot(Vector2Int a, Vector2Int b) {
+			return a.x * b.x + b.y * b.y;
+		}
+
 		public static Vector2Int Max(Vector2Int a, Vector2Int b) {
 			return new Vector2Int(Mathf.Max(a.x, b.x), Mathf.Max(a.y, b.y));
 		}
 
 		public static Vector2Int Abs(Vector2Int v) {
 			return new Vector2Int((v.x < 0) ? -v.x : v.x, (v.y < 0) ? -v.y : v.y);
+		}
+
+		public static Vector2Int Sign(Vector2Int v) {
+			return new Vector2Int((v.x < 0) ? -1 : 1, (v.y < 0) ? -1 : 1);
 		}
 
 		public static Vector2Int Clamp(Vector2Int v, int min, int max) {
@@ -107,6 +156,10 @@ namespace Xenon {
 			return new Vector2Int((v.x < rect.min.x) ? rect.min.x : ((v.x >= rect.max.x) ? rect.max.x - 1 : v.x), (v.y < rect.min.y) ? rect.min.y : ((v.y >= rect.max.y) ? rect.max.y - 1 : v.y));
 		}
 
+		public static Vector2Int Step(Vector2Int i, Vector2Int edge) {
+			return new Vector2Int((i.x < edge.x) ? 0 : 1, (i.y < edge.y) ? 0 : 1);
+		}
+
 		//// Vector3 \\\\
 		public static float MaxComponent(Vector3 v) {
 			return Mathf.Max(Mathf.Max(v.x, v.y), v.z);
@@ -118,6 +171,14 @@ namespace Xenon {
 
 		public static Vector3 Abs(Vector3 v) {
 			return new Vector3(v.x.Abs(), v.y.Abs(), v.z.Abs());
+		}
+
+		public static Vector3 Sign(Vector3 v) {
+			return new Vector3((v.x < 0f) ? -1f : 1f, (v.y < 0f) ? -1f : 1f, (v.z < 0f) ? -1f : 1f);
+		}
+
+		public static Vector3 Inverse(Vector3 v) {
+			return new Vector3(1f / v.x, 1f / v.y, 1f / v.z);
 		}
 
 		public static Vector3 Ceil(Vector3 v) {
@@ -144,6 +205,10 @@ namespace Xenon {
 			return new Vector3Int(Mathf.RoundToInt(v.x), Mathf.RoundToInt(v.y), Mathf.RoundToInt(v.z));
 		}
 
+		public static Vector3 Step(Vector3 i, Vector3 edge) {
+			return new Vector3((i.x < edge.x) ? 0f : 1f, (i.y < edge.y) ? 0f : 1f, (i.z < edge.z) ? 0f : 1f);
+		}
+
 		public static Vector3 Clamp(Vector3 v, float min, float max) {
 			return new Vector3(v.x.Clamp(min, max), v.y.Clamp(min, max), v.z.Clamp(min, max));
 		}
@@ -163,6 +228,10 @@ namespace Xenon {
 			return new Vector3(v.x.Remap(from1, to1, from2, to2), v.y.Remap(from1, to1, from2, to2), v.z.Remap(from1, to1, from2, to2));
 		}
 
+		public static Vector3 Remap(Vector3 v, Vector3 from1, Vector3 to1, Vector3 from2, Vector3 to2) {
+			return new Vector3(v.x.Remap(from1.x, to1.x, from2.x, to2.x), v.y.Remap(from1.y, to1.y, from2.y, to2.y), v.z.Remap(from1.z, to1.z, from2.z, to2.z));
+		}
+
 		public static Vector3 RemapMagnitude(Vector3 v, float from1, float to1, float from2, float to2) {
 			float mag = v.magnitude.Remap(from1, to1, from2, to2);
 			return v.normalized * mag;
@@ -177,12 +246,20 @@ namespace Xenon {
 			return Mathf.Max(Mathf.Max(v.x, v.y), v.z);
 		}
 
+		public static int Dot(Vector3Int a, Vector3Int b) {
+			return a.x * b.x + b.y * b.y + a.z * b.z;
+		}
+
 		public static Vector3Int Max(Vector3Int a, Vector3Int b) {
 			return new Vector3Int(Mathf.Max(a.x, b.x), Mathf.Max(a.y, b.y), Mathf.Max(a.z, b.z));
 		}
 
 		public static Vector3Int Abs(Vector3Int v) {
 			return new Vector3Int((v.x < 0) ? -v.x : v.x, (v.y < 0) ? -v.y : v.y, (v.z < 0) ? -v.z : v.z);
+		}
+
+		public static Vector3Int Sign(Vector3Int v) {
+			return new Vector3Int((v.x < 0) ? -1 : 1, (v.y < 0) ? -1 : 1, (v.z < 0) ? -1 : 1);
 		}
 
 		public static Vector3Int Clamp(Vector3Int v, int min, int max) {
@@ -195,6 +272,10 @@ namespace Xenon {
 
 		public static Vector3Int ClampMaxExcluded(Vector3Int v, BoundsInt box) {
 			return new Vector3Int((v.x < box.min.x) ? box.min.x : ((v.x >= box.max.x) ? box.max.x - 1 : v.x), (v.y < box.min.y) ? box.min.y : ((v.y >= box.max.y) ? box.max.y - 1 : v.y), (v.z < box.min.z) ? box.min.z : ((v.z >= box.max.z) ? box.max.z - 1 : v.z));
+		}
+
+		public static Vector3Int Step(Vector3Int i, Vector3Int edge) {
+			return new Vector3Int((i.x < edge.x) ? 0 : 1, (i.y < edge.y) ? 0 : 1, (i.z < edge.z) ? 0 : 1);
 		}
 
 		//// Vector4 \\\\
@@ -210,6 +291,14 @@ namespace Xenon {
 			return new Vector4(v.x.Abs(), v.y.Abs(), v.z.Abs(), v.w.Abs());
 		}
 
+		public static Vector4 Sign(Vector4 v) {
+			return new Vector4((v.x < 0f) ? -1f : 1f, (v.y < 0f) ? -1f : 1f, (v.z < 0f) ? -1f : 1f, (v.w < 0f) ? -1f : 1f);
+		}
+
+		public static Vector4 Inverse(Vector4 v) {
+			return new Vector4(1f / v.x, 1f / v.y, 1f / v.z, 1f / v.w);
+		}
+
 		public static Vector4 Ceil(Vector4 v) {
 			return new Vector4(Mathf.Ceil(v.x), Mathf.Ceil(v.y), Mathf.Ceil(v.z), Mathf.Ceil(v.w));
 		}
@@ -220,6 +309,10 @@ namespace Xenon {
 
 		public static Vector4 Round(Vector4 v) {
 			return new Vector4(Mathf.Round(v.x), Mathf.Round(v.y), Mathf.Round(v.z), Mathf.Round(v.w));
+		}
+
+		public static Vector4 Step(Vector4 i, Vector4 edge) {
+			return new Vector4((i.x < edge.x) ? 0f : 1f, (i.y < edge.y) ? 0f : 1f, (i.z < edge.z) ? 0f : 1f, (i.z < edge.w) ? 0f : 1f);
 		}
 
 		public static Vector4 Clamp(Vector4 v, float min, float max) {
@@ -233,6 +326,10 @@ namespace Xenon {
 
 		public static Vector4 Remap(Vector4 v, float from1, float to1, float from2, float to2) {
 			return new Vector4(v.x.Remap(from1, to1, from2, to2), v.y.Remap(from1, to1, from2, to2), v.z.Remap(from1, to1, from2, to2), v.w.Remap(from1, to1, from2, to2));
+		}
+
+		public static Vector4 Remap(Vector4 v, Vector4 from1, Vector4 to1, Vector4 from2, Vector4 to2) {
+			return new Vector4(v.x.Remap(from1.x, to1.x, from2.x, to2.x), v.y.Remap(from1.y, to1.y, from2.y, to2.y), v.z.Remap(from1.z, to1.z, from2.z, to2.z), v.w.Remap(from1.w, to1.w, from2.w, to2.w));
 		}
 
 		public static Vector4 RemapMagnitude(Vector4 v, float from1, float to1, float from2, float to2) {
@@ -371,12 +468,24 @@ namespace Xenon {
 			return Mathf.Max(v.x, v.y);
 		}
 
+		public static float Dot(this Vector2 a, Vector2 b) {
+			return a.x * b.x + a.y * b.y;
+		}
+
 		public static Vector2 Max(this Vector2 a, Vector2 b) {
 			return new Vector2(Mathf.Max(a.x, b.x), Mathf.Max(a.y, b.y));
 		}
 
 		public static Vector2 Abs(this Vector2 v) {
 			return new Vector2(v.x.Abs(), v.y.Abs());
+		}
+
+		public static Vector2 Sign(this Vector2 v) {
+			return new Vector2((v.x < 0f) ? -1f : 1f, (v.y < 0f) ? -1f : 1f);
+		}
+
+		public static Vector2 Inverse(this Vector2 v) {
+			return new Vector2(1f / v.x, 1f / v.y);
 		}
 
 		public static Vector2 Ceil(this Vector2 v) {
@@ -403,6 +512,10 @@ namespace Xenon {
 			return new Vector2Int(Mathf.RoundToInt(v.x), Mathf.RoundToInt(v.y));
 		}
 
+		public static Vector2 Step(this Vector2 i, Vector2 edge) {
+			return new Vector2((i.x < edge.x) ? 0f : 1f, (i.y < edge.y) ? 0f : 1f);
+		}
+
 		public static Vector2 Clamp(this Vector2 v, float min, float max) {
 			return new Vector2(v.x.Clamp(min, max), v.y.Clamp(min, max));
 		}
@@ -418,6 +531,10 @@ namespace Xenon {
 
 		public static Vector2 Remap(this Vector2 v, float from1, float to1, float from2, float to2) {
 			return new Vector2(v.x.Remap(from1, to1, from2, to2), v.y.Remap(from1, to1, from2, to2));
+		}
+
+		public static Vector2 Remap(this Vector2 v, Vector2 from1, Vector2 to1, Vector2 from2, Vector2 to2) {
+			return new Vector2(v.x.Remap(from1.x, to1.x, from2.x, to2.x), v.y.Remap(from1.y, to1.y, from2.y, to2.y));
 		}
 
 		public static Vector2 RemapMagnitude(this Vector2 v, float from1, float to1, float from2, float to2) {
@@ -448,12 +565,20 @@ namespace Xenon {
 			return Mathf.Max(v.x, v.y);
 		}
 
+		public static int Dot(this Vector2Int a, Vector2Int b) {
+			return a.x * b.x + b.y * b.y;
+		}
+
 		public static Vector2Int Max(this Vector2Int a, Vector2Int b) {
 			return new Vector2Int(Mathf.Max(a.x, b.x), Mathf.Max(a.y, b.y));
 		}
 
 		public static Vector2Int Abs(this Vector2Int v) {
 			return new Vector2Int((v.x < 0) ? -v.x : v.x, (v.y < 0) ? -v.y : v.y);
+		}
+
+		public static Vector2Int Sign(this Vector2Int v) {
+			return new Vector2Int((v.x < 0) ? -1 : 1, (v.y < 0) ? -1 : 1);
 		}
 
 		public static Vector2Int Clamp(this Vector2Int v, int min, int max) {
@@ -466,6 +591,10 @@ namespace Xenon {
 
 		public static Vector2Int ClampMaxExcluded(this Vector2Int v, RectInt rect) {
 			return new Vector2Int((v.x < rect.min.x) ? rect.min.x : ((v.x >= rect.max.x) ? rect.max.x - 1 : v.x), (v.y < rect.min.y) ? rect.min.y : ((v.y >= rect.max.y) ? rect.max.y - 1 : v.y));
+		}
+
+		public static Vector2Int Step(this Vector2Int i, Vector2Int edge) {
+			return new Vector2Int((i.x < edge.x) ? 0 : 1, (i.y < edge.y) ? 0 : 1);
 		}
 
 		public static Vector3Int ToVec3Int(this Vector2Int v, int z = 0) {
@@ -485,12 +614,28 @@ namespace Xenon {
 			return Mathf.Max(Mathf.Max(v.x, v.y), v.z);
 		}
 
+		public static float Dot(this Vector3 a, Vector3 b) {
+			return a.x * b.x + a.y * b.y + a.z * b.z;
+		}
+
+		public static Vector3 Cross(this Vector3 l, Vector3 r) {
+			return new Vector3(r.y * l.z - r.z * l.y, r.z * l.x - r.x * l.z, r.x * l.y - r.y * l.x);
+		}
+
 		public static Vector3 Max(this Vector3 a, Vector3 b) {
 			return new Vector3(Mathf.Max(a.x, b.x), Mathf.Max(a.y, b.y), Mathf.Max(a.z, b.z));
 		}
 
 		public static Vector3 Abs(this Vector3 v) {
 			return new Vector3(v.x.Abs(), v.y.Abs(), v.z.Abs());
+		}
+
+		public static Vector3 Sign(this Vector3 v) {
+			return new Vector3((v.x < 0f) ? -1f : 1f, (v.y < 0f) ? -1f : 1f, (v.z < 0f) ? -1f : 1f);
+		}
+
+		public static Vector3 Inverse(this Vector3 v) {
+			return new Vector3(1f / v.x, 1f / v.y, 1f / v.z);
 		}
 
 		public static Vector3 Ceil(this Vector3 v) {
@@ -517,6 +662,10 @@ namespace Xenon {
 			return new Vector3Int(Mathf.RoundToInt(v.x), Mathf.RoundToInt(v.y), Mathf.RoundToInt(v.z));
 		}
 
+		public static Vector3 Step(this Vector3 i, Vector3 edge) {
+			return new Vector3((i.x < edge.x) ? 0f : 1f, (i.y < edge.y) ? 0f : 1f, (i.z < edge.z) ? 0f : 1f);
+		}
+
 		public static Vector3 Clamp(this Vector3 v, float min, float max) {
 			return new Vector3(v.x.Clamp(min, max), v.y.Clamp(min, max), v.z.Clamp(min, max));
 		}
@@ -534,6 +683,10 @@ namespace Xenon {
 
 		public static Vector3 Remap(this Vector3 v, float from1, float to1, float from2, float to2) {
 			return new Vector3(v.x.Remap(from1, to1, from2, to2), v.y.Remap(from1, to1, from2, to2), v.z.Remap(from1, to1, from2, to2));
+		}
+
+		public static Vector3 Remap(this Vector3 v, Vector3 from1, Vector3 to1, Vector3 from2, Vector3 to2) {
+			return new Vector3(v.x.Remap(from1.x, to1.x, from2.x, to2.x), v.y.Remap(from1.y, to1.y, from2.y, to2.y), v.z.Remap(from1.z, to1.z, from2.z, to2.z));
 		}
 
 		public static Vector3 RemapMagnitude(this Vector3 v, float from1, float to1, float from2, float to2) {
@@ -566,12 +719,20 @@ namespace Xenon {
 			return Mathf.Max(Mathf.Max(v.x, v.y), v.z);
 		}
 
+		public static int Dot(this Vector3Int a, Vector3Int b) {
+			return a.x * b.x + b.y * b.y + a.z * b.z;
+		}
+
 		public static Vector3Int Max(this Vector3Int a, Vector3Int b) {
 			return new Vector3Int(Mathf.Max(a.x, b.x), Mathf.Max(a.y, b.y), Mathf.Max(a.z, b.z));
 		}
 
 		public static Vector3Int Abs(this Vector3Int v) {
 			return new Vector3Int((v.x < 0) ? -v.x : v.x, (v.y < 0) ? -v.y : v.y, (v.z < 0) ? -v.z : v.z);
+		}
+
+		public static Vector3Int Sign(this Vector3Int v) {
+			return new Vector3Int((v.x < 0) ? -1 : 1, (v.y < 0) ? -1 : 1, (v.z < 0) ? -1 : 1);
 		}
 
 		public static Vector3Int Clamp(this Vector3Int v, int min, int max) {
@@ -584,6 +745,10 @@ namespace Xenon {
 
 		public static Vector3Int ClampMaxExcluded(this Vector3Int v, BoundsInt box) {
 			return new Vector3Int((v.x < box.min.x) ? box.min.x : ((v.x >= box.max.x) ? box.max.x - 1 : v.x), (v.y < box.min.y) ? box.min.y : ((v.y >= box.max.y) ? box.max.y - 1 : v.y), (v.z < box.min.z) ? box.min.z : ((v.z >= box.max.z) ? box.max.z - 1 : v.z));
+		}
+
+		public static Vector3Int Step(this Vector3Int i, Vector3Int edge) {
+			return new Vector3Int((i.x < edge.x) ? 0 : 1, (i.y < edge.y) ? 0 : 1, (i.z < edge.z) ? 0 : 1);
 		}
 
 		public static Vector2Int ToVec2Int(this Vector3Int v) {
@@ -603,12 +768,24 @@ namespace Xenon {
 			return Mathf.Max(Mathf.Max(v.x, v.y), Mathf.Max(v.z, v.w));
 		}
 
+		public static float Dot(this Vector4 a, Vector4 b) {
+			return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
+		}
+
 		public static Vector4 Max(this Vector4 a, Vector4 b) {
 			return new Vector4(Mathf.Max(a.x, b.x), Mathf.Max(a.y, b.y), Mathf.Max(a.z, b.z), Mathf.Max(a.w, b.w));
 		}
 
 		public static Vector4 Abs(this Vector4 v) {
 			return new Vector4(v.x.Abs(), v.y.Abs(), v.z.Abs(), v.w.Abs());
+		}
+
+		public static Vector4 Sign(this Vector4 v) {
+			return new Vector4((v.x < 0f) ? -1f : 1f, (v.y < 0f) ? -1f : 1f, (v.z < 0f) ? -1f : 1f, (v.w < 0f) ? -1f : 1f);
+		}
+
+		public static Vector4 Inverse(this Vector4 v) {
+			return new Vector4(1f / v.x, 1f / v.y, 1f / v.z, 1f / v.w);
 		}
 
 		public static Vector4 Ceil(this Vector4 v) {
@@ -623,6 +800,10 @@ namespace Xenon {
 			return new Vector4(Mathf.Round(v.x), Mathf.Round(v.y), Mathf.Round(v.z), Mathf.Round(v.w));
 		}
 
+		public static Vector4 Step(this Vector4 i, Vector4 edge) {
+			return new Vector4((i.x < edge.x) ? 0f : 1f, (i.y < edge.y) ? 0f : 1f, (i.z < edge.z) ? 0f : 1f, (i.z < edge.w) ? 0f : 1f);
+		}
+
 		public static Vector4 Clamp(this Vector4 v, float min, float max) {
 			return new Vector4(v.x.Clamp(min, max), v.y.Clamp(min, max), v.z.Clamp(min, max), v.w.Clamp(min, max));
 		}
@@ -634,6 +815,10 @@ namespace Xenon {
 
 		public static Vector4 Remap(this Vector4 v, float from1, float to1, float from2, float to2) {
 			return new Vector4(v.x.Remap(from1, to1, from2, to2), v.y.Remap(from1, to1, from2, to2), v.z.Remap(from1, to1, from2, to2), v.w.Remap(from1, to1, from2, to2));
+		}
+
+		public static Vector4 Remap(this Vector4 v, Vector4 from1, Vector4 to1, Vector4 from2, Vector4 to2) {
+			return new Vector4(v.x.Remap(from1.x, to1.x, from2.x, to2.x), v.y.Remap(from1.y, to1.y, from2.y, to2.y), v.z.Remap(from1.z, to1.z, from2.z, to2.z), v.w.Remap(from1.w, to1.w, from2.w, to2.w));
 		}
 
 		public static Vector4 RemapMagnitude(this Vector4 v, float from1, float to1, float from2, float to2) {
