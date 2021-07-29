@@ -11,6 +11,16 @@ namespace Xenon {
 		public const float RAD2DEG = 57.295779513082320876798154814105f;
 	}
 
+	public static class ConstDouble {
+		public const double PI = 3.1415926535897932384626433832795;
+		public const double TWO_PI = 6.283185307179586476925286766559;
+		public const double HALF_PI = 1.5707963267948966192313216916398;
+		public const double QUARTER_PI = 0.78539816339744830961566084581988;
+		public const double E = 2.7182818284590452353602874713527;
+		public const double DEG2RAD = 0.01745329251994329576923690768489;
+		public const double RAD2DEG = 57.295779513082320876798154814105;
+	}
+
 	public static class ConstVector2Int {
 		public static readonly Vector2Int zero = new Vector2Int(0, 0);
 		public static readonly Vector2Int one = new Vector2Int(1, 1);
