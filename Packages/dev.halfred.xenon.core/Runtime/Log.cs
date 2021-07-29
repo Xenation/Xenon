@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Reflection;
 
 using UnityEngine;
 
@@ -33,11 +34,33 @@ namespace Xenon {
 			}
 		}
 
+		private static uint currentCategoriesCount = 0;
 		private static Category[] categories = new Category[sizeof(ulong) * 8];
 		private static Queue<Message> messages = new Queue<Message>();
+		private static Dictionary<System.Type, ulong> typeMarkers = new Dictionary<System.Type, ulong>();
+		private static Dictionary<MethodBase, ulong> methodMarkers = new Dictionary<MethodBase, ulong>();
 
 		static Log() {
 			RegisterCategory("LOG");
+		}
+
+		public static ulong Marker(params string[] categories) {
+			System.Diagnostics.StackTrace trace = new System.Diagnostics.StackTrace();
+			System.Diagnostics.StackFrame callFrame = trace.GetFrame(1);
+			MethodBase method = callFrame.GetMethod();
+			System.Type type = method.DeclaringType;
+			ulong categoryBits = Categories(categories);
+			if (method == type.TypeInitializer) { // The caller is a static initializer
+				typeMarkers[type] = categoryBits;
+			} else { // The caller is a classic method
+				methodMarkers[method] = categoryBits;
+			}
+			return categoryBits;
+		}
+
+		public static void Append(Severity severity, string msg) {
+			ulong categories = FindMarkedCategories();
+			Append(severity, categories, msg);
 		}
 
 		public static void Append(Severity severity, ulong categories, string msg) {
@@ -51,12 +74,40 @@ namespace Xenon {
 			UnityDebug(message);
 		}
 
+		private static ulong FindMarkedCategories() {
+			System.Diagnostics.StackTrace trace = new System.Diagnostics.StackTrace();
+			System.Diagnostics.StackFrame callFrame = trace.GetFrame(3);
+			MethodBase method = callFrame.GetMethod();
+			System.Type type = method.DeclaringType;
+			ulong typeCategories;
+			typeMarkers.TryGetValue(type, out typeCategories);
+			ulong methodCategories;
+			methodMarkers.TryGetValue(method, out methodCategories);
+			return typeCategories | methodCategories;
+		}
+
 		public static void Info(ulong categories, string msg) {
 			Append(Severity.INF, categories, msg);
 		}
 
 		public static void Info(string msg, params string[] categories) {
 			Append(Severity.INF, Categories(categories), msg);
+		}
+
+		public static void Info(string msg) {
+			Append(Severity.INF, msg);
+		}
+
+		public static void Info(ulong categories, object msg) {
+			Append(Severity.INF, categories, msg.ToString());
+		}
+
+		public static void Info(object msg, params string[] categories) {
+			Append(Severity.INF, Categories(categories), msg.ToString());
+		}
+
+		public static void Info(object msg) {
+			Append(Severity.INF, msg.ToString());
 		}
 
 		public static void Warn(ulong categories, string msg) {
@@ -67,12 +118,44 @@ namespace Xenon {
 			Append(Severity.WAR, Categories(categories), msg);
 		}
 
+		public static void Warn(string msg) {
+			Append(Severity.WAR, msg);
+		}
+
+		public static void Warn(ulong categories, object msg) {
+			Append(Severity.WAR, categories, msg.ToString());
+		}
+
+		public static void Warn(object msg, params string[] categories) {
+			Append(Severity.WAR, Categories(categories), msg.ToString());
+		}
+
+		public static void Warn(object msg) {
+			Append(Severity.WAR, msg.ToString());
+		}
+
 		public static void Error(ulong categories, string msg) {
 			Append(Severity.ERR, categories, msg);
 		}
 
 		public static void Error(string msg, params string[] categories) {
 			Append(Severity.ERR, Categories(categories), msg);
+		}
+
+		public static void Error(string msg) {
+			Append(Severity.ERR, msg);
+		}
+
+		public static void Error(ulong categories, object msg) {
+			Append(Severity.ERR, categories, msg.ToString());
+		}
+
+		public static void Error(object msg, params string[] categories) {
+			Append(Severity.ERR, Categories(categories), msg.ToString());
+		}
+
+		public static void Error(object msg) {
+			Append(Severity.ERR, msg.ToString());
 		}
 
 		public static void Assert(bool condition, ulong categories, string msg) {
@@ -84,6 +167,30 @@ namespace Xenon {
 		public static void Assert(bool condition, string msg, params string[] categories) {
 			if (condition) return;
 			Append(Severity.ASS, Categories(categories), msg);
+			Debug.Break();
+		}
+
+		public static void Assert(bool condition, string msg) {
+			if (condition) return;
+			Append(Severity.ASS, msg);
+			Debug.Break();
+		}
+
+		public static void Assert(bool condition, ulong categories, object msg) {
+			if (condition) return;
+			Append(Severity.ASS, categories, msg.ToString());
+			Debug.Break();
+		}
+
+		public static void Assert(bool condition, object msg, params string[] categories) {
+			if (condition) return;
+			Append(Severity.ASS, Categories(categories), msg.ToString());
+			Debug.Break();
+		}
+
+		public static void Assert(bool condition, object msg) {
+			if (condition) return;
+			Append(Severity.ASS, msg.ToString());
 			Debug.Break();
 		}
 
@@ -115,7 +222,7 @@ namespace Xenon {
 		}
 
 		private static uint RegisterCategory(string name) {
-			uint bit = FindFreeCategoryIndex();
+			uint bit = currentCategoriesCount++;
 			Assert(bit < categories.Length, "Too many categories!", "LOG");
 			ref Category category = ref categories[bit];
 			category = new Category() {
@@ -124,14 +231,6 @@ namespace Xenon {
 				nameHash = name.GetHashCode()
 			};
 			return bit;
-		}
-
-		private static uint FindFreeCategoryIndex() {
-			for (uint bit = 0; bit < categories.Length; bit++) {
-				ref readonly Category category = ref categories[bit];
-				if (category.nameHash == 0) return bit;
-			}
-			return uint.MaxValue;
 		}
 
 		public static string[] GetCategoryNames(ulong categoryBits) {
@@ -179,6 +278,10 @@ namespace Xenon {
 					Debug.Assert(false, msg.ToString(false));
 					break;
 			}
+		}
+
+		public static void Clear() {
+			messages.Clear();
 		}
 
 	}
