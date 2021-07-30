@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
 
-using UnityEngine;
-
 namespace Xenon {
 	public static class Log {
 
@@ -19,7 +17,7 @@ namespace Xenon {
 			public string name;
 		}
 
-		private struct Message {
+		public struct Message {
 			public Severity severity;
 			public ulong categories;
 			public string content;
@@ -34,6 +32,9 @@ namespace Xenon {
 			}
 		}
 
+		public delegate void MessageEvent(Message message);
+		public static event MessageEvent onMessageAppended;
+
 		private static uint currentCategoriesCount = 0;
 		private static Category[] categories = new Category[sizeof(ulong) * 8];
 		private static Queue<Message> messages = new Queue<Message>();
@@ -41,7 +42,7 @@ namespace Xenon {
 		private static Dictionary<MethodBase, ulong> methodMarkers = new Dictionary<MethodBase, ulong>();
 
 		static Log() {
-			RegisterCategory("LOG");
+			Marker("LOG");
 		}
 
 		public static ulong Marker(params string[] categories) {
@@ -71,7 +72,7 @@ namespace Xenon {
 				time = System.DateTime.Now
 			};
 			messages.Enqueue(message);
-			UnityDebug(message);
+			onMessageAppended?.Invoke(message);
 		}
 
 		private static ulong FindMarkedCategories() {
@@ -161,37 +162,31 @@ namespace Xenon {
 		public static void Assert(bool condition, ulong categories, string msg) {
 			if (condition) return;
 			Append(Severity.ASS, categories, msg);
-			Debug.Break();
 		}
 
 		public static void Assert(bool condition, string msg, params string[] categories) {
 			if (condition) return;
 			Append(Severity.ASS, Categories(categories), msg);
-			Debug.Break();
 		}
 
 		public static void Assert(bool condition, string msg) {
 			if (condition) return;
 			Append(Severity.ASS, msg);
-			Debug.Break();
 		}
 
 		public static void Assert(bool condition, ulong categories, object msg) {
 			if (condition) return;
 			Append(Severity.ASS, categories, msg.ToString());
-			Debug.Break();
 		}
 
 		public static void Assert(bool condition, object msg, params string[] categories) {
 			if (condition) return;
 			Append(Severity.ASS, Categories(categories), msg.ToString());
-			Debug.Break();
 		}
 
 		public static void Assert(bool condition, object msg) {
 			if (condition) return;
 			Append(Severity.ASS, msg.ToString());
-			Debug.Break();
 		}
 
 		public static ulong Categories(params string[] categoryNames) {
@@ -261,23 +256,6 @@ namespace Xenon {
 				}
 			}
 			return names.Remove(names.Length - 1);
-		}
-
-		private static void UnityDebug(Message msg) {
-			switch (msg.severity) {
-				case Severity.INF:
-					Debug.Log(msg.ToString(false));
-					break;
-				case Severity.WAR:
-					Debug.LogWarning(msg.ToString(false));
-					break;
-				case Severity.ERR:
-					Debug.LogError(msg.ToString(false));
-					break;
-				case Severity.ASS:
-					Debug.Assert(false, msg.ToString(false));
-					break;
-			}
 		}
 
 		public static void Clear() {
