@@ -35,9 +35,11 @@ namespace Xenon {
 		public delegate void MessageEvent(Message message);
 		public static event MessageEvent onMessageAppended;
 
+		public static ulong appendCategoriesFilter = ~0ul;
+
 		private static uint currentCategoriesCount = 0;
 		private static Category[] categories = new Category[sizeof(ulong) * 8];
-		private static Queue<Message> messages = new Queue<Message>();
+		private static History<Message> messages = new History<Message>(1000);
 		private static Dictionary<System.Type, ulong> typeMarkers = new Dictionary<System.Type, ulong>();
 		private static Dictionary<MethodBase, ulong> methodMarkers = new Dictionary<MethodBase, ulong>();
 
@@ -59,19 +61,20 @@ namespace Xenon {
 			return categoryBits;
 		}
 
-		public static void Append(Severity severity, string msg) {
+		private static void Append(Severity severity, string msg) {
 			ulong categories = FindMarkedCategories();
 			Append(severity, categories, msg);
 		}
 
-		public static void Append(Severity severity, ulong categories, string msg) {
+		private static void Append(Severity severity, ulong categories, string msg) {
+			if ((categories & appendCategoriesFilter) == 0) return;
 			Message message = new Message() {
 				severity = severity,
 				categories = categories,
 				content = msg,
 				time = System.DateTime.Now
 			};
-			messages.Enqueue(message);
+			messages.Add(ref message);
 			onMessageAppended?.Invoke(message);
 		}
 
@@ -87,6 +90,7 @@ namespace Xenon {
 			return typeCategories | methodCategories;
 		}
 
+		#region Info
 		public static void Info(ulong categories, string msg) {
 			Append(Severity.INF, categories, msg);
 		}
@@ -110,7 +114,9 @@ namespace Xenon {
 		public static void Info(object msg) {
 			Append(Severity.INF, msg.ToString());
 		}
+		#endregion
 
+		#region Warn
 		public static void Warn(ulong categories, string msg) {
 			Append(Severity.WAR, categories, msg);
 		}
@@ -134,7 +140,9 @@ namespace Xenon {
 		public static void Warn(object msg) {
 			Append(Severity.WAR, msg.ToString());
 		}
+		#endregion
 
+		#region Error
 		public static void Error(ulong categories, string msg) {
 			Append(Severity.ERR, categories, msg);
 		}
@@ -158,7 +166,9 @@ namespace Xenon {
 		public static void Error(object msg) {
 			Append(Severity.ERR, msg.ToString());
 		}
+		#endregion
 
+		#region Assert
 		public static void Assert(bool condition, ulong categories, string msg) {
 			if (condition) return;
 			Append(Severity.ASS, categories, msg);
@@ -188,6 +198,45 @@ namespace Xenon {
 			if (condition) return;
 			Append(Severity.ASS, msg.ToString());
 		}
+		#endregion
+
+		#region Fallback
+		public static T Fallback<T>(bool condition, T current, T fallback, ulong categories, string msg) {
+			if (condition) return current;
+			Append(Severity.ASS, categories, msg);
+			return fallback;
+		}
+
+		public static T Fallback<T>(bool condition, T current, T fallback, string msg, params string[] categories) {
+			if (condition) return current;
+			Append(Severity.ASS, Categories(categories), msg);
+			return fallback;
+		}
+
+		public static T Fallback<T>(bool condition, T current, T fallback, string msg) {
+			if (condition) return current;
+			Append(Severity.ASS, msg);
+			return fallback;
+		}
+
+		public static T Fallback<T>(bool condition, T current, T fallback, ulong categories, object msg) {
+			if (condition) return current;
+			Append(Severity.ASS, categories, msg.ToString());
+			return fallback;
+		}
+
+		public static T Fallback<T>(bool condition, T current, T fallback, object msg, params string[] categories) {
+			if (condition) return current;
+			Append(Severity.ASS, Categories(categories), msg.ToString());
+			return fallback;
+		}
+
+		public static T Fallback<T>(bool condition, T current, T fallback, object msg) {
+			if (condition) return current;
+			Append(Severity.ASS, msg.ToString());
+			return fallback;
+		}
+		#endregion
 
 		public static ulong Categories(params string[] categoryNames) {
 			ulong bitField = 0;
@@ -262,5 +311,9 @@ namespace Xenon {
 			messages.Clear();
 		}
 
+	}
+
+	public interface LogOutput {
+		public void ProcessMessage(Log.Message message);
 	}
 }
