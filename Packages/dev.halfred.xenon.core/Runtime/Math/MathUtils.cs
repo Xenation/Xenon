@@ -476,6 +476,10 @@ namespace Xenon {
 			return new Vector2(Mathf.Max(a.x, b.x), Mathf.Max(a.y, b.y));
 		}
 
+		public static Vector2 Min(this Vector2 a, Vector2 b) {
+			return new Vector2(Mathf.Min(a.x, b.x), Mathf.Min(a.y, b.y));
+		}
+
 		public static Vector2 Abs(this Vector2 v) {
 			return new Vector2(v.x.Abs(), v.y.Abs());
 		}
@@ -573,6 +577,10 @@ namespace Xenon {
 			return new Vector2Int(Mathf.Max(a.x, b.x), Mathf.Max(a.y, b.y));
 		}
 
+		public static Vector2Int Min(this Vector2Int a, Vector2Int b) {
+			return new Vector2Int(Mathf.Min(a.x, b.x), Mathf.Min(a.y, b.y));
+		}
+
 		public static Vector2Int Abs(this Vector2Int v) {
 			return new Vector2Int((v.x < 0) ? -v.x : v.x, (v.y < 0) ? -v.y : v.y);
 		}
@@ -624,6 +632,10 @@ namespace Xenon {
 
 		public static Vector3 Max(this Vector3 a, Vector3 b) {
 			return new Vector3(Mathf.Max(a.x, b.x), Mathf.Max(a.y, b.y), Mathf.Max(a.z, b.z));
+		}
+
+		public static Vector3 Min(this Vector3 a, Vector3 b) {
+			return new Vector3(Mathf.Min(a.x, b.x), Mathf.Min(a.y, b.y), Mathf.Min(a.z, b.z));
 		}
 
 		public static Vector3 Abs(this Vector3 v) {
@@ -727,6 +739,10 @@ namespace Xenon {
 			return new Vector3Int(Mathf.Max(a.x, b.x), Mathf.Max(a.y, b.y), Mathf.Max(a.z, b.z));
 		}
 
+		public static Vector3Int Min(this Vector3Int a, Vector3Int b) {
+			return new Vector3Int(Mathf.Min(a.x, b.x), Mathf.Min(a.y, b.y), Mathf.Min(a.z, b.z));
+		}
+
 		public static Vector3Int Abs(this Vector3Int v) {
 			return new Vector3Int((v.x < 0) ? -v.x : v.x, (v.y < 0) ? -v.y : v.y, (v.z < 0) ? -v.z : v.z);
 		}
@@ -774,6 +790,10 @@ namespace Xenon {
 
 		public static Vector4 Max(this Vector4 a, Vector4 b) {
 			return new Vector4(Mathf.Max(a.x, b.x), Mathf.Max(a.y, b.y), Mathf.Max(a.z, b.z), Mathf.Max(a.w, b.w));
+		}
+
+		public static Vector4 Min(this Vector4 a, Vector4 b) {
+			return new Vector4(Mathf.Min(a.x, b.x), Mathf.Min(a.y, b.y), Mathf.Min(a.z, b.z), Mathf.Min(a.w, b.w));
 		}
 
 		public static Vector4 Abs(this Vector4 v) {
@@ -837,15 +857,27 @@ namespace Xenon {
 			return q.Max(Vector2.zero).magnitude + Mathf.Min(q.MaxComponent(), 0.0f);
 		}
 
-		public static RectInt Floor(this Rect r) {
+		public static Rect Floor(this Rect r) {
+			return new Rect(r.position.Floor(), r.size.Floor());
+		}
+
+		public static RectInt FloorToInt(this Rect r) {
 			return new RectInt(r.position.FloorToInt(), r.size.FloorToInt());
 		}
 
-		public static RectInt Ceil(this Rect r) {
+		public static Rect Ceil(this Rect r) {
+			return new Rect(r.position.Ceil(), r.size.Ceil());
+		}
+
+		public static RectInt CeilToInt(this Rect r) {
 			return new RectInt(r.position.CeilToInt(), r.size.CeilToInt());
 		}
 
-		public static RectInt Round(this Rect r) {
+		public static Rect Round(this Rect r) {
+			return new Rect(r.position.Round(), r.size.Round());
+		}
+
+		public static RectInt RoundToInt(this Rect r) {
 			return new RectInt(r.position.RoundToInt(), r.size.RoundToInt());
 		}
 
