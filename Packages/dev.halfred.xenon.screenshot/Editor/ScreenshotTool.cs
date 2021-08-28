@@ -28,14 +28,22 @@ namespace Xenon.Screenshot {
 		private Camera targetCamera = null;
 		private Vector2Int resolution = new Vector2Int(1920, 1080);
 		private int superSize = 1;
+		private bool saveToClipboard = false;
 		private string directory = "Temp";
 		private string filename = "screenshot.png";
 
 		private void OnGUI() {
+			// Camera
 			useSceneCamera = EditorGUILayout.Toggle("Use Scene Camera", useSceneCamera);
+			EditorGUI.BeginDisabledGroup(useSceneCamera);
 			targetCamera = EditorGUILayout.ObjectField("Camera", targetCamera, typeof(Camera), true) as Camera;
+			EditorGUI.EndDisabledGroup();
+			// Resolution
 			resolution = EditorGUILayout.Vector2IntField("Resolution", resolution);
 			superSize = EditorGUILayout.IntSlider("Super Size", superSize, 1, 8);
+			// Save
+			saveToClipboard = EditorGUILayout.Toggle("Save To Clipboard", saveToClipboard);
+			EditorGUI.BeginDisabledGroup(saveToClipboard);
 			EditorGUILayout.BeginHorizontal();
 			directory = EditorGUILayout.TextField("Directory", directory);
 			if (GUILayout.Button("...")) {
@@ -43,6 +51,7 @@ namespace Xenon.Screenshot {
 			}
 			EditorGUILayout.EndHorizontal();
 			filename = EditorGUILayout.TextField("Filename", filename);
+			EditorGUI.EndDisabledGroup();
 
 			if (GUILayout.Button("Take Screenshot")) {
 				string filepath = Path.Combine(directory, filename);
@@ -98,9 +107,18 @@ namespace Xenon.Screenshot {
 			RenderTexture.active = null;
 			RenderTexture.ReleaseTemporary(texture);
 
-			// Write file
-			byte[] pngBytes = finalTexture.EncodeToPNG();
-			File.WriteAllBytes(filepath, pngBytes);
+			// Save screenshot
+			SaveScreenshot(finalTexture, filepath);
+		}
+
+		private void SaveScreenshot(Texture2D texture, string filepath) {
+			if (saveToClipboard) {
+				byte[] bmpBytes = Bitmap.GetDIBBytes(texture);
+				Clipboard.SetImage(bmpBytes);
+			} else {
+				byte[] pngBytes = texture.EncodeToPNG();
+				File.WriteAllBytes(filepath, pngBytes);
+			}
 		}
 
 		private Camera FindCamera() {
