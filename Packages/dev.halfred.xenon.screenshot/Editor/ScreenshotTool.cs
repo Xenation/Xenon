@@ -55,7 +55,6 @@ namespace Xenon.Screenshot {
 
 			if (GUILayout.Button("Take Screenshot")) {
 				string filepath = Path.Combine(directory, filename);
-				Debug.Log(filepath);
 
 				Camera camera = targetCamera;
 				bool isSceneView = false;
@@ -115,9 +114,11 @@ namespace Xenon.Screenshot {
 			if (saveToClipboard) {
 				byte[] bmpBytes = Bitmap.GetDIBBytes(texture);
 				Clipboard.SetImage(bmpBytes);
+				Debug.Log($"Screenshot saved to clipboard");
 			} else {
 				byte[] pngBytes = texture.EncodeToPNG();
 				File.WriteAllBytes(filepath, pngBytes);
+				Debug.Log($"Screenshot saved: {filepath}");
 			}
 		}
 
