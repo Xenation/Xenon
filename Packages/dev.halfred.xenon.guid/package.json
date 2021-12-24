@@ -1,0 +1,18 @@
+{
+	"name": "dev.halfred.xenon.guid",
+	"version": "0.1.0-preview",
+	"displayName": "Xenon GUID Manager",
+	"description": "A GUID manager, allows replacing broken GUIDs or finding references in other assets",
+	"unity": "2020.3",
+	"keywords": [
+		"tool",
+		"guid",
+		"utility"
+	],
+	"license": "MIT",
+	"author": {
+		"name": "HalfRed/Xenation",
+		"email": "xenations.111@gmail.com",
+		"url": "https://xenation.github.io/"
+	}
+}

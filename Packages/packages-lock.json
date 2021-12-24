@@ -132,6 +132,12 @@
       "source": "embedded",
       "dependencies": {}
     },
+    "dev.halfred.xenon.guid": {
+      "version": "file:dev.halfred.xenon.guid",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "dev.halfred.xenon.screenshot": {
       "version": "file:dev.halfred.xenon.screenshot",
       "depth": 0,
