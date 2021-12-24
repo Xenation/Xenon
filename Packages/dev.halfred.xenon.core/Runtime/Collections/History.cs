@@ -4,12 +4,12 @@ namespace Xenon {
 
 		public ref T this[int index] {
 			get {
-				return ref buffer[(startIndex - index) % (int) capacity];
+				return ref buffer[((startIndex - index) % (int) capacity + (int) capacity) % (int) capacity];
 			}
 		}
 		public ref T this[uint index] {
 			get {
-				return ref buffer[(startIndex - (int) index) % (int) capacity];
+				return ref buffer[((startIndex - (int) index) % (int) capacity + (int) capacity) % (int) capacity];
 			}
 		}
 
