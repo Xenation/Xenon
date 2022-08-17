@@ -38,7 +38,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.visualstudio": {
-      "version": "2.0.11",
+      "version": "2.0.16",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -47,7 +47,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.vscode": {
-      "version": "1.2.3",
+      "version": "1.2.5",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -70,7 +70,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.test-framework": {
-      "version": "1.1.24",
+      "version": "1.1.31",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -120,26 +120,20 @@
       },
       "url": "https://packages.unity.com"
     },
-    "dev.halfred.xenon": {
-      "version": "file:dev.halfred.xenon",
+    "red.thishalf.xenon": {
+      "version": "file:red.thishalf.xenon",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
     },
-    "dev.halfred.xenon.core": {
-      "version": "file:dev.halfred.xenon.core",
+    "red.thishalf.xenon.guid": {
+      "version": "file:red.thishalf.xenon.guid",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
     },
-    "dev.halfred.xenon.guid": {
-      "version": "file:dev.halfred.xenon.guid",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
-    "dev.halfred.xenon.screenshot": {
-      "version": "file:dev.halfred.xenon.screenshot",
+    "red.thishalf.xenon.screenshot": {
+      "version": "file:red.thishalf.xenon.screenshot",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
@@ -150,6 +144,12 @@
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
+    },
+    "red.thishalf.xenon.core": {
+      "version": "file:red.thishalf.xenon.core",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",

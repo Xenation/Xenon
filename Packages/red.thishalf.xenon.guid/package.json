@@ -1,5 +1,5 @@
 {
-	"name": "dev.halfred.xenon.guid",
+	"name": "red.thishalf.xenon.guid",
 	"version": "0.1.0-preview",
 	"displayName": "Xenon GUID Manager",
 	"description": "A GUID manager, allows replacing broken GUIDs or finding references in other assets",

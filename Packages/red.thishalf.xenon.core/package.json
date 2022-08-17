@@ -1,8 +1,8 @@
 {
-	"name": "dev.halfred.xenon",
-	"version": "0.5.0",
-	"displayName": "Xenon",
-	"description": "A set of utilities",
+	"name": "red.thishalf.xenon.core",
+	"version": "0.1.1-preview",
+	"displayName": "Xenon Core",
+	"description": "Core Xenon Library, contains utility, math and convenience code",
 	"unity": "2020.3",
 	"keywords": [
 		"utility",

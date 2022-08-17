@@ -339,7 +339,7 @@ namespace Xenon {
 
 		//// Rect \\\\
 		public static float SignedDistance(Rect r, Vector2 p) {
-			p = p - r.position;
+			p = p - (r.position + r.size * 0.5f);
 			Vector2 q = p.Abs() - r.size * 0.5f;
 			return q.Max(Vector2.zero).magnitude + Mathf.Min(q.MaxComponent(), 0.0f);
 		}
@@ -852,7 +852,7 @@ namespace Xenon {
 
 		//// Rect \\\\
 		public static float SignedDistance(this Rect r, Vector2 p) {
-			p = p - r.position;
+			p = p - (r.position + r.size * 0.5f);
 			Vector2 q = p.Abs() - r.size * 0.5f;
 			return q.Max(Vector2.zero).magnitude + Mathf.Min(q.MaxComponent(), 0.0f);
 		}
