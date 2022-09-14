@@ -4,7 +4,7 @@ namespace Xenon {
 	public static class UnityLogger {
 
 		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSplashScreen)]
-		private static void Dummy() {
+		public static void Dummy() {
 			// Dummy method to force static init
 		}
 

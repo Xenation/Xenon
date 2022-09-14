@@ -45,6 +45,9 @@ namespace Xenon {
 
 		static Log() {
 			Marker("LOG");
+#if UNITY
+			UnityLogger.Dummy();
+#endif
 		}
 
 		public static ulong Marker(params string[] categories) {
@@ -67,7 +70,7 @@ namespace Xenon {
 		}
 
 		private static void Append(Severity severity, ulong categories, string msg) {
-			if ((categories & appendCategoriesFilter) == 0) return;
+			if (appendCategoriesFilter != ~0ul && (categories & appendCategoriesFilter) == 0) return;
 			Message message = new Message() {
 				severity = severity,
 				categories = categories,
@@ -90,7 +93,7 @@ namespace Xenon {
 			return typeCategories | methodCategories;
 		}
 
-		#region Info
+#region Info
 		public static void Info(ulong categories, string msg) {
 			Append(Severity.INF, categories, msg);
 		}
@@ -114,9 +117,9 @@ namespace Xenon {
 		public static void Info(object msg) {
 			Append(Severity.INF, msg.ToString());
 		}
-		#endregion
+#endregion
 
-		#region Warn
+#region Warn
 		public static void Warn(ulong categories, string msg) {
 			Append(Severity.WAR, categories, msg);
 		}
@@ -140,9 +143,9 @@ namespace Xenon {
 		public static void Warn(object msg) {
 			Append(Severity.WAR, msg.ToString());
 		}
-		#endregion
+#endregion
 
-		#region Error
+#region Error
 		public static void Error(ulong categories, string msg) {
 			Append(Severity.ERR, categories, msg);
 		}
@@ -166,9 +169,9 @@ namespace Xenon {
 		public static void Error(object msg) {
 			Append(Severity.ERR, msg.ToString());
 		}
-		#endregion
+#endregion
 
-		#region Assert
+#region Assert
 		public static void Assert(bool condition, ulong categories, string msg) {
 			if (condition) return;
 			Append(Severity.ASS, categories, msg);
@@ -198,9 +201,9 @@ namespace Xenon {
 			if (condition) return;
 			Append(Severity.ASS, msg.ToString());
 		}
-		#endregion
+#endregion
 
-		#region Fallback
+#region Fallback
 		public static T Fallback<T>(bool condition, T current, T fallback, ulong categories, string msg) {
 			if (condition) return current;
 			Append(Severity.ASS, categories, msg);
@@ -236,7 +239,7 @@ namespace Xenon {
 			Append(Severity.ASS, msg.ToString());
 			return fallback;
 		}
-		#endregion
+#endregion
 
 		public static ulong Categories(params string[] categoryNames) {
 			ulong bitField = 0;

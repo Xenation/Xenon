@@ -1,5 +1,4 @@
-﻿
-namespace Xenon {
+﻿namespace Xenon {
 	public class History<T> {
 
 		public ref T this[int index] {
@@ -27,8 +26,9 @@ namespace Xenon {
 		}
 
 		public void Add(ref T item) {
-			buffer[startIndex++] = item;
+			startIndex++;
 			startIndex = startIndex % (int) capacity;
+			buffer[startIndex] = item;
 			count += (count >= capacity) ? 0u : 1u;
 		}
 

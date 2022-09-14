@@ -1,6 +1,6 @@
 {
 	"name": "red.thishalf.xenon.core",
-	"version": "0.1.1-preview",
+	"version": "0.1.1-preview.4",
 	"displayName": "Xenon Core",
 	"description": "Core Xenon Library, contains utility, math and convenience code",
 	"unity": "2020.3",
