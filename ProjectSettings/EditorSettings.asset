@@ -15,7 +15,7 @@ EditorSettings:
   m_EtcTextureFastCompressor: 2
   m_EtcTextureNormalCompressor: 2
   m_EtcTextureBestCompressor: 5
-  m_ProjectGenerationIncludedExtensions: txt;xml;fnt;cd;asmref
+  m_ProjectGenerationIncludedExtensions: txt;xml;fnt;cd;asmref;md;json
   m_ProjectGenerationRootNamespace: Xenon
   m_EnableTextureStreamingInEditMode: 1
   m_EnableTextureStreamingInPlayMode: 1
@@ -38,3 +38,4 @@ EditorSettings:
   m_CacheServerEnableUpload: 1
   m_CacheServerEnableAuth: 0
   m_CacheServerEnableTls: 0
+  m_CacheServerValidationMode: 2

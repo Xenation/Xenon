@@ -1,10 +1,8 @@
 {
-    "name": "Xenon.Editor",
+    "name": "PublishHack.Editor",
     "rootNamespace": "",
     "references": [
-        "Xenon",
-        "Xenon.Debug",
-        "PublishHack.Editor"
+        "GUID:b942d9b44cc5b411b80101f4ee5e8dd3"
     ],
     "includePlatforms": [
         "Editor"

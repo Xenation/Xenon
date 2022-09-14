@@ -1,11 +1,7 @@
 {
-    "name": "Xenon.Editor",
+    "name": "PublishHack.TXT",
     "rootNamespace": "",
-    "references": [
-        "Xenon",
-        "Xenon.Debug",
-        "PublishHack.Editor"
-    ],
+    "references": [],
     "includePlatforms": [
         "Editor"
     ],
@@ -16,5 +12,5 @@
     "autoReferenced": true,
     "defineConstraints": [],
     "versionDefines": [],
-    "noEngineReferences": false
+    "noEngineReferences": true
 }

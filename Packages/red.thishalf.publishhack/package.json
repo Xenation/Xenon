@@ -1,0 +1,25 @@
+{
+	"name": "red.thishalf.publishhack",
+	"displayName": "Package Develoment Publish Hack",
+	"version": "0.1.2-preview",
+	"description": "Allows for the addition of custom publish workflows for packages.\nSince the \"Package Development\" package does not expose the proper interfaces and methods to add custom publish extensions, a hack is needed to bypass these restrictions. This is done through reflection and runtime generated IL code that interfaces with the usually inaccessible APIs",
+	"unity": "2020.3",
+	"keywords": [
+		"packages",
+		"dev",
+		"development",
+		"extensions",
+		"editor",
+		"api",
+		"hack"
+	],
+	"license": "MIT",
+	"author": {
+		"name": "HalfRed/Xenation",
+		"email": "xenations.111@gmail.com",
+		"url": "https://xenation.github.io/"
+	},
+	"dependencies": {
+		"com.unity.upm.develop": "0.2.0-preview"
+	}
+}
