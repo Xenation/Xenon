@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
+
+using Xenon.Collections;
 using Xenon.Processes;
 
 namespace Xenon.Test {
@@ -21,6 +23,11 @@ namespace Xenon.Test {
 		public void Awake() {
 			rythmer = GetComponent<ProcessRythmer>();
 			testListener = new TestListener();
+
+			RefList<Vector3> t = new RefList<Vector3>(8);
+			foreach (ref Vector3 v in t) {
+				Debug.Log($"{v}");
+			}
 		}
 
 		public void Start() {

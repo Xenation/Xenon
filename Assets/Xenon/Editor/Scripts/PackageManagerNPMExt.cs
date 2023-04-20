@@ -16,7 +16,8 @@ namespace Xenon.Editor {
 			System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
 			//startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
 			startInfo.FileName = "cmd.exe";
-			startInfo.Arguments = $"/k npm publish {packageVersion.packageInfo.resolvedPath} --registry https://npm.thishalf.red";
+			UnityEditor.PackageManager.PackageInfo packageInfo = UnityEditor.PackageManager.PackageInfo.FindForAssetPath($"Packages/{packageVersion.name}");
+			startInfo.Arguments = $"/k npm publish {packageInfo.resolvedPath} --registry https://npm.thishalf.red";
 			process.StartInfo = startInfo;
 			process.Start();
 		}
