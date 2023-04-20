@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.2] - 2023-03-01
+- Fully implemented RefList<T> utility collection
+- Version naming change to match Package Lifecycle V2 rules
+
 ## [0.1.1-preview.4] - 2022-09-14
 - Fixed Changelog ordering
 
