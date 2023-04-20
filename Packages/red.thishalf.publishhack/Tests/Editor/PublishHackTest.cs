@@ -16,7 +16,8 @@ namespace PublishHack.Tests {
 		public string name => "TEST";
 
 		public void OnPublish(IHackedPackageVersion packageVersion) {
-			Debug.Log($"TEST Publish");
+			UnityEditor.PackageManager.PackageInfo packageInfo = UnityEditor.PackageManager.PackageInfo.FindForAssetPath($"Packages/{packageVersion.name}");
+			Debug.Log($"TEST Publish: {packageInfo.resolvedPath}");
 		}
 	}
 

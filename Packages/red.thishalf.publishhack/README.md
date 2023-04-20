@@ -26,6 +26,8 @@ public class CustomPublishExtension : IHackedPublishExtension {
 }
 ```
 
+**Note:** Prior to version 0.1.3-preview, the `IHackedPackageVersion` struct had a convenient direct reference to `PackageInfo`, since this has been removed on the corresponding `IPackageVersion` in an undocumented change (it is internal so makes some sense), now if you want the linked package info you should use something like `UnityEditor.PackageManager.PackageInfo.FindForAssetPath($"Packages/{packageVersion.name}");`.
+
 
 ## How does it work?
 

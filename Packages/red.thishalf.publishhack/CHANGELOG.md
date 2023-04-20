@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.1.3-preview] - 2023-02-27
+- Updated to work with com.unity.upm.develop v0.5.0
+
 ## [0.1.2-preview] - 2022-09-14
 - Added XmlDoc
 - Added a simple test/assert script

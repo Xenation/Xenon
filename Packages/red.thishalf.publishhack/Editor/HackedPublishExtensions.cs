@@ -20,7 +20,6 @@ namespace PublishHack {
 		string uniqueId { get; }
 		string packageUniqueId { get; }
 		//IHackedPackage package { get; }
-		UnityEditor.PackageManager.PackageInfo packageInfo { get; }
 		bool isInstalled { get; }
 	}
 
@@ -33,7 +32,6 @@ namespace PublishHack {
 		public string uniqueId { get; set; }
 		public string packageUniqueId { get; set; }
 		//public IHackedPackage package { get; set; }
-		public UnityEditor.PackageManager.PackageInfo packageInfo { get; set; }
 		public bool isInstalled { get; set; }
 	}
 
@@ -174,7 +172,6 @@ namespace PublishHack {
 			CopyToLocalStructReflect(onPublishIL, hackedVersionBuilder, "versionString");
 			CopyToLocalStructReflect(onPublishIL, hackedVersionBuilder, "uniqueId");
 			CopyToLocalStructReflect(onPublishIL, hackedVersionBuilder, "packageUniqueId");
-			CopyToLocalStructReflect(onPublishIL, hackedVersionBuilder, "packageInfo");
 			CopyToLocalStructReflect(onPublishIL, hackedVersionBuilder, "isInstalled");
 
 			onPublishIL.Emit(OpCodes.Ldarg_0);

@@ -1,7 +1,7 @@
 {
 	"name": "red.thishalf.publishhack",
 	"displayName": "Package Develoment Publish Hack",
-	"version": "0.1.2-preview",
+	"version": "0.1.3-preview",
 	"description": "Allows for the addition of custom publish workflows for packages.\nSince the \"Package Development\" package does not expose the proper interfaces and methods to add custom publish extensions, a hack is needed to bypass these restrictions. This is done through reflection and runtime generated IL code that interfaces with the usually inaccessible APIs",
 	"unity": "2020.3",
 	"keywords": [
