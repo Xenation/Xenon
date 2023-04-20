@@ -1,0 +1,24 @@
+{
+	"name": "red.thishalf.xenon.console",
+	"version": "0.1.0-preview",
+	"displayName": "Xenon Console",
+	"description": "A Simple In-game Console Implementation",
+	"unity": "2020.3",
+	"dependencies": {
+		"red.thishalf.xenon.core": "0.1.1-preview.4"
+	},
+	"keywords": [
+		"utility",
+		"debug",
+		"tool",
+		"console",
+		"terminal",
+		"ingame"
+	],
+	"license": "MIT",
+	"author": {
+		"name": "HalfRed/Xenation",
+		"email": "xenations.111@gmail.com",
+		"url": "https://xenation.github.io/"
+	}
+}

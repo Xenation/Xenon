@@ -1,0 +1,25 @@
+{
+    "name": "Xenon.Console.Editor.Tests",
+    "rootNamespace": "Xenon.Console.Editor.Tests",
+    "references": [
+        "Undefined.XenonConsole.Editor",
+        "Undefined.XenonConsole",
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
